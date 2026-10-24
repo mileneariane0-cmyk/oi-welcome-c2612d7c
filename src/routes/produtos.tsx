@@ -31,7 +31,7 @@ function Products() {
   },[query,category,sort]);
   const count=Object.values(cart).reduce((sum,n)=>sum+n,0);
   return <div className="min-h-screen bg-[#FFF8F6] text-[#30272B]">
-    <div className="bg-[#75152F] px-4 py-2 text-center text-xs text-white">Personalizê • Cada detalhe é único</div>
+
     <header className="border-b border-[#eadde0] bg-white"><div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 lg:px-8"><a href="/" className="text-2xl font-extrabold tracking-tight text-[#75152F]">Personaliz<span className="text-[#819B87]">ê</span> <span className="text-[#F29BAA]">✦</span></a><a href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[#75152F]"><ArrowLeft size={17}/> Voltar à loja</a></div></header>
     <main className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
       <span className="text-xs font-bold uppercase tracking-[.2em] text-[#819B87]">Catálogo completo</span>
