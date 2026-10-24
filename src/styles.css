@@ -63,25 +63,25 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --background: oklch(0.984 0.009 35);
+  --foreground: oklch(0.29 0.025 350);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
+  --primary: oklch(0.37 0.13 8);
   --primary-foreground: oklch(0.984 0.003 247.858);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --muted-foreground: oklch(0.55 0.035 350);
+  --accent: oklch(0.94 0.03 350);
+  --accent-foreground: oklch(0.37 0.13 8);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --border: oklch(0.9 0.025 350);
+  --input: oklch(0.9 0.025 350);
+  --ring: oklch(0.37 0.13 8);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -95,6 +95,22 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+}
+
+.brand-logo { display: block; width: 168px; height: auto; aspect-ratio: 3 / 1; object-fit: contain; }
+.admin-logo { width: 200px; max-width: 100%; }
+.auth-logo { width: 280px; max-width: 100%; }
+.logo-footer { display: block; flex-shrink: 0; background: var(--background); border-radius: 4px; padding: 3px 6px; }
+.logo-footer .brand-logo { width: 110px; }
+.auth-screen { display: flex; align-items: center; }
+.auth-input { width: 100%; height: 44px; border: 1px solid var(--input); border-radius: 6px; background: var(--card); padding: 0 12px; outline: none; }
+.auth-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--accent); }
+@media (max-width: 480px) {
+  .brand-logo { width: 130px; }
+  .auth-logo { width: 280px; }
+  .admin-logo { width: 200px; }
+  .logo-footer .brand-logo { width: 88px; }
+  footer > div > div { gap: 16px; }
 }
 
 .dark {

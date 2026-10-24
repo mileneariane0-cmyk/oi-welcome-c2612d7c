@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { BrandLogo } from "@/components/brand-logo";
 import { useMemo, useState } from "react";
 import { ArrowLeft, Search, ShoppingBag, SlidersHorizontal } from "lucide-react";
 
-export const Route = createFileRoute("/produtos")({ component: Products });
+export const Route = createFileRoute("/produtos")({ head: () => ({ meta: [{ title: "Produtos | Personalizê" }, { name: "description", content: "Explore o catálogo de convites digitais e personalizados da Personalizê." }, { property: "og:title", content: "Produtos | Personalizê" }, { property: "og:description", content: "Explore o catálogo de convites digitais e personalizados da Personalizê." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: Products });
 
 type Item = { id: number; name: string; category: string; price: number; old?: number; emoji: string; gradient: string; badge?: string };
 const categories = ["Todos", "Convites digitais", "Aniversário", "Casamento", "Chá de bebê", "Personalizados", "Papelaria"];
@@ -32,7 +33,7 @@ function Products() {
   const count=Object.values(cart).reduce((sum,n)=>sum+n,0);
   return <div className="min-h-screen bg-[#FFF8F6] text-[#30272B]">
 
-    <header className="border-b border-[#eadde0] bg-white"><div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 lg:px-8"><a href="/" className="text-2xl font-extrabold tracking-tight text-[#75152F]">Personaliz<span className="text-[#819B87]">ê</span> <span className="text-[#F29BAA]">✦</span></a><a href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[#75152F]"><ArrowLeft size={17}/> Voltar à loja</a></div></header>
+    <header className="border-b border-[#eadde0] bg-white"><div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 lg:px-8"><a href="/" className="shrink-0" aria-label="Personalizê — página inicial"><BrandLogo /></a><a href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[#75152F]"><ArrowLeft size={17}/> Voltar à loja</a></div></header>
     <main className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
       <span className="text-xs font-bold uppercase tracking-[.2em] text-[#819B87]">Catálogo completo</span>
       <h1 className="mt-2 font-serif text-4xl text-[#75152F] sm:text-5xl">Todos os produtos</h1>
@@ -46,6 +47,6 @@ function Products() {
       {filtered.length===0?<div className="rounded-2xl bg-white p-10 text-center text-[#75152F]">Nenhum produto encontrado. Tente outra busca ou categoria.</div>:<div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">{filtered.map(item=><article key={item.id} className="overflow-hidden rounded-2xl border border-[#eddee0] bg-white shadow-sm"><div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br text-6xl sm:text-8xl ${item.gradient}`}><span role="img" aria-label={item.name}>{item.emoji}</span>{item.badge&&<span className="absolute left-2 top-2 rounded-full bg-[#75152F] px-2.5 py-1 text-[10px] font-bold text-white">{item.badge}</span>}</div><div className="p-3 sm:p-4"><p className="text-xs font-semibold text-[#819B87]">{item.category}</p><h2 className="mt-1 min-h-10 text-sm font-semibold sm:text-base">{item.name}</h2>{item.old&&<p className="mt-2 text-xs text-[#a19598] line-through">{money(item.old)}</p>}<p className="mt-1 text-xl font-extrabold text-[#75152F]">{money(item.price)}</p><p className="mt-1 text-[11px] text-[#86777b]">Preço ilustrativo</p><button onClick={()=>setCart(current=>({...current,[item.id]:(current[item.id]||0)+1}))} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#75152F] px-2 py-3 text-xs font-bold text-white sm:text-sm"><ShoppingBag size={16}/> {cart[item.id]?"Adicionado ("+cart[item.id]+")":"Adicionar à sacola"}</button></div></article>)}</div>}
       <p className="mt-8 text-center text-xs text-[#8b7b7f]">Catálogo demonstrativo. O carrinho real e o pagamento serão configurados nas próximas etapas.</p>
     </main>
-    <footer className="bg-[#461222] px-4 py-3 text-white"><div className="mx-auto flex max-w-7xl items-center justify-between gap-3"><span className="font-bold">Personalizê ✦</span><div className="flex gap-8 text-sm"><a href="https://wa.me/5571986691076" target="_blank" rel="noopener noreferrer">Entre em contato</a><a href="/administrador">Admin</a></div></div></footer>
+    <footer className="bg-[#461222] px-4 py-3 text-white"><div className="mx-auto flex max-w-7xl items-center justify-between gap-3"><span className="logo-footer"><BrandLogo /></span><div className="flex gap-8 text-sm"><a href="https://wa.me/5571986691076" target="_blank" rel="noopener noreferrer">Entre em contato</a><a href="/administrador">Admin</a></div></div></footer>
   </div>;
 }
