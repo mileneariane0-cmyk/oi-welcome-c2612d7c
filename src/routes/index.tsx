@@ -31,7 +31,7 @@ function Home() {
   const add = (id:number) => setCart(current=>({...current,[id]:(current[id]||0)+1}));
   const remove = (id:number) => setCart(current=>{const next={...current}; if((next[id]||0)<=1)delete next[id]; else next[id]-=1;return next;});
   return <div className="min-h-screen bg-[#FFF8F6] text-[#30272B]">
-    <div className="bg-[#75152F] px-4 py-2 text-center text-xs font-medium text-white sm:text-sm">✨ Personalizados com carinho • Convites digitais • Retirada em Salvador — BA</div>
+
     <header className="sticky top-0 z-40 border-b border-[#eddee1] bg-[#fffaf8]/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 lg:gap-8 lg:px-8">
         <a href="#" className="shrink-0 text-2xl font-black tracking-[-.06em] text-[#75152F] sm:text-3xl">Personaliz<span className="text-[#819B87]">ê</span><span className="align-top text-xs text-[#F29BAA]">✦</span></a>
