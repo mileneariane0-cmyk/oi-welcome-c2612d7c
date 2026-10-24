@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, ChevronDown, Gift, Heart, Instagram, Menu, MessageCircle, Package, PartyPopper, Search, ShoppingBag, Sparkles, Truck, X } from "lucide-react";
+import { ArrowRight, Gift, Heart, Menu, MessageCircle, Package, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Home });
 
