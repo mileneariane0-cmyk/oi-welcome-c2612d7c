@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { AdminAuthForm } from '@/components/admin-auth-form';
 
 export const Route = createFileRoute('/auth')({
-  validateSearch: (search: Record<string, unknown>) => ({ denied: search.denied === true || search.denied === 'true' }),
+  validateSearch: (search: Record<string, unknown>): { denied?: boolean } => ({ denied: search['denied'] === true || search['denied'] === 'true' ? true : undefined }),
   head: () => ({ meta: [
     { title: 'Acesso administrativo | Personalizê' },
     { name: 'description', content: 'Acesso seguro ao painel administrativo da Personalizê.' },
