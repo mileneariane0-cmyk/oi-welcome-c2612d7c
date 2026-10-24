@@ -8,6 +8,13 @@
       "when": 1792881162472,
       "tag": "0000_personalize_initial_secure_platform",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792881306883,
+      "tag": "0001_restrict_profile_trigger_execution",
+      "breakpoints": true
     }
   ]
 }
