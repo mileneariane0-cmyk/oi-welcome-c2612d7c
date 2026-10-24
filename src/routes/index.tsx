@@ -1,96 +1,70 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { ArrowRight, Gift, Heart, Menu, MessageCircle, Package, Search, ShoppingBag, Sparkles, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowRight, ChevronRight, Heart, MapPin, Menu, Minus, Plus, Search, ShoppingBag, SlidersHorizontal, Sparkles, Trash2, X } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Home });
 
-const categories = [
-  { name: "Convites digitais", emoji: "💌", tone: "bg-[#f8e2e6]", note: "Experiências especiais" },
-  { name: "Aniversários", emoji: "🎂", tone: "bg-[#edf0e7]", note: "Para celebrar" },
-  { name: "Casamentos", emoji: "💍", tone: "bg-[#f5e8df]", note: "Amor em detalhes" },
-  { name: "Chás e revelações", emoji: "🧸", tone: "bg-[#f6e8f0]", note: "Momentos únicos" },
-  { name: "Personalizados", emoji: "🎁", tone: "bg-[#e8eee8]", note: "Feitos para você" },
-  { name: "Papelaria", emoji: "🎀", tone: "bg-[#f7e7e1]", note: "Cada detalhe conta" },
+type Item = { id: number; name: string; category: string; price: number; old?: number; emoji: string; gradient: string; badge?: string };
+const categories = ["Todos", "Convites digitais", "Aniversário", "Casamento", "Chá de bebê", "Personalizados", "Papelaria"];
+const items: Item[] = [
+  {id:1,name:"Convite digital interativo floral",category:"Convites digitais",price:49.9,old:69.9,emoji:"💌",gradient:"from-[#eec5ce] via-[#fbe8e6] to-[#e8d5bd]",badge:"Destaque"},
+  {id:2,name:"Kit festa personalizado",category:"Personalizados",price:89.9,emoji:"🎉",gradient:"from-[#d9e6d5] via-[#eff1e5] to-[#f6e1d9]",badge:"Sob encomenda"},
+  {id:3,name:"Convite de casamento elegante",category:"Casamento",price:59.9,old:79.9,emoji:"💍",gradient:"from-[#e9ded2] via-[#faf2e8] to-[#e9d5dc]",badge:"Oferta"},
+  {id:4,name:"Topo de bolo personalizado",category:"Aniversário",price:24.9,emoji:"🎂",gradient:"from-[#f5dce4] via-[#f9eee7] to-[#f3e5c8]"},
+  {id:5,name:"Convite chá de bebê delicado",category:"Chá de bebê",price:44.9,emoji:"🧸",gradient:"from-[#dce8df] via-[#f9f1e7] to-[#e9dce8]"},
+  {id:6,name:"Tags e adesivos personalizados",category:"Papelaria",price:19.9,emoji:"🎀",gradient:"from-[#ead6e3] via-[#f9e7e7] to-[#f2e8d5]"},
+  {id:7,name:"Convite digital de aniversário",category:"Convites digitais",price:39.9,emoji:"🎈",gradient:"from-[#e9d9ed] via-[#fbe9e9] to-[#f7e3cf]"},
+  {id:8,name:"Lembrancinha personalizada",category:"Personalizados",price:34.9,emoji:"🎁",gradient:"from-[#dbe8d8] via-[#f7ede2] to-[#f1d9dc]"},
 ];
-
-const showcases = [
-  { name: "Convite interativo floral", category: "Convites digitais", emoji: "💐", bg: "from-[#f8d9df] to-[#f4ede8]" },
-  { name: "Kit festa personalizado", category: "Personalizados", emoji: "🎉", bg: "from-[#e6eee3] to-[#f7e9dd]" },
-  { name: "Convite especial de casamento", category: "Convites digitais", emoji: "💍", bg: "from-[#f5e7dd] to-[#f7f0e9]" },
-  { name: "Papelaria para comemorações", category: "Papelaria", emoji: "🎀", bg: "from-[#f3dfe6] to-[#f9efe7]" },
-];
+const money = (value: number) => value.toLocaleString("pt-BR", {style:"currency",currency:"BRL"});
 
 function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  return (
-    <div className="min-h-screen bg-[#FFF8F6] text-[#30272B]">
-      <div className="bg-[#75152F] px-4 py-2 text-center text-xs font-medium tracking-wide text-white sm:text-sm">
-        Cada detalhe é único. E cada celebração merece ser inesquecível. ✨
+  const [menuOpen,setMenuOpen] = useState(false);
+  const [query,setQuery] = useState("");
+  const [category,setCategory] = useState("Todos");
+  const [cart,setCart] = useState<Record<number,number>>({});
+  const [cartOpen,setCartOpen] = useState(false);
+  const [favorites,setFavorites] = useState<number[]>([]);
+  const filtered = useMemo(()=>items.filter(item => (category === "Todos" || item.category === category) && (item.name+" "+item.category).toLowerCase().includes(query.toLowerCase())),[category,query]);
+  const count = Object.values(cart).reduce((sum,n)=>sum+n,0);
+  const total = items.reduce((sum,item)=>sum+item.price*(cart[item.id] || 0),0);
+  const add = (id:number) => setCart(current=>({...current,[id]:(current[id]||0)+1}));
+  const remove = (id:number) => setCart(current=>{const next={...current}; if((next[id]||0)<=1)delete next[id]; else next[id]-=1;return next;});
+  return <div className="min-h-screen bg-[#FFF8F6] text-[#30272B]">
+    <div className="bg-[#75152F] px-4 py-2 text-center text-xs font-medium text-white sm:text-sm">✨ Personalizados com carinho • Convites digitais • Retirada em Salvador — BA</div>
+    <header className="sticky top-0 z-40 border-b border-[#eddee1] bg-[#fffaf8]/95 shadow-sm backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 lg:gap-8 lg:px-8">
+        <a href="#" className="shrink-0 text-2xl font-black tracking-[-.06em] text-[#75152F] sm:text-3xl">Personaliz<span className="text-[#819B87]">ê</span><span className="align-top text-xs text-[#F29BAA]">✦</span></a>
+        <div className="hidden flex-1 lg:block"><label className="flex items-center gap-2 rounded-full border border-[#e8d6db] bg-white px-5 py-3 focus-within:border-[#75152F]"><Search size={19} className="text-[#75152F]"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="O que você está procurando?" aria-label="Buscar produtos" className="w-full bg-transparent text-sm outline-none"/></label></div>
+        <nav className="ml-auto hidden items-center gap-5 text-sm font-semibold lg:flex"><a href="#produtos" className="hover:text-[#75152F]">Produtos</a><a href="#categorias" className="hover:text-[#75152F]">Categorias</a><a href="#sobre" className="hover:text-[#75152F]">Sobre</a></nav>
+        <button onClick={()=>setCartOpen(true)} className="relative flex items-center gap-2 rounded-full border border-[#ead9dc] bg-white p-3 text-[#75152F] hover:bg-[#f9ebee]" aria-label={`Abrir sacola com ${count} itens`}><ShoppingBag size={21}/><span className="hidden text-sm font-semibold sm:inline">Sacola</span>{count>0&&<span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#75152F] px-1 text-xs text-white">{count}</span>}</button>
+        <button onClick={()=>setMenuOpen(!menuOpen)} aria-label="Abrir menu" aria-expanded={menuOpen} className="rounded-full p-2 lg:hidden">{menuOpen?<X/>:<Menu/>}</button>
       </div>
-      <header className="sticky top-0 z-30 border-b border-[#eadbdc] bg-[#fffaf8]/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 lg:px-8">
-          <a href="#inicio" aria-label="Personalizê - início" className="shrink-0 text-2xl font-extrabold tracking-[-0.06em] text-[#75152F] sm:text-3xl">
-            Personaliz<span className="text-[#819B87]">ê</span><span className="ml-1 align-top text-xs text-[#F29BAA]">✦</span>
-          </a>
-          <nav aria-label="Navegação principal" className="hidden items-center gap-7 text-sm font-semibold lg:flex">
-            <a className="hover:text-[#75152F]" href="#inicio">Início</a>
-            <a className="hover:text-[#75152F]" href="#categorias">Categorias</a>
-            <a className="hover:text-[#75152F]" href="#vitrine">Produtos</a>
-            <a className="hover:text-[#75152F]" href="#como-funciona">Como funciona</a>
-            <a className="hover:text-[#75152F]" href="#sobre">Sobre nós</a>
-          </nav>
-          <div className="flex items-center gap-1 sm:gap-3">
-            <button onClick={() => setSearchOpen(!searchOpen)} aria-label="Abrir busca" aria-expanded={searchOpen} className="rounded-full p-2 hover:bg-[#f7e7e9]"><Search size={20}/></button>
-            <a href="#vitrine" aria-label="Explorar produtos" className="rounded-full p-2 hover:bg-[#f7e7e9]"><ShoppingBag size={20}/></a>
-            <button onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={menuOpen} className="rounded-full p-2 hover:bg-[#f7e7e9] lg:hidden">{menuOpen ? <X size={23}/> : <Menu size={23}/>}</button>
-          </div>
+      <div className="px-4 pb-3 lg:hidden"><label className="flex items-center gap-2 rounded-full border border-[#ead8dc] bg-white px-4 py-3"><Search size={18} className="text-[#75152F]"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar convites, personalizados..." aria-label="Buscar produtos" className="w-full bg-transparent text-sm outline-none"/></label></div>
+      {menuOpen&&<nav className="flex flex-col border-t border-[#f1e1e5] bg-white px-5 py-2 lg:hidden">{[["Produtos","#produtos"],["Categorias","#categorias"],["Como funciona","#como-funciona"],["Sobre","#sobre"]].map(([label,href])=><a key={href} onClick={()=>setMenuOpen(false)} href={href} className="py-3 text-sm font-semibold">{label}</a>)}</nav>}
+    </header>
+    <main>
+      <section className="mx-auto grid max-w-7xl gap-4 px-4 py-5 lg:grid-cols-[1.7fr_1fr] lg:px-8">
+        <div className="relative flex min-h-[310px] flex-col justify-center overflow-hidden rounded-[28px] bg-gradient-to-r from-[#75152F] via-[#8e3450] to-[#ba7085] px-7 py-10 text-white sm:min-h-[370px] sm:px-12">
+          <div className="pointer-events-none absolute -right-12 -top-14 h-72 w-72 rounded-full border-[35px] border-white/10"/><div className="pointer-events-none absolute bottom-[-90px] right-10 h-56 w-56 rounded-full bg-[#f2aabb]/25 blur-2xl"/>
+          <div className="relative max-w-md"><span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wider"><Sparkles size={15}/> Personalizê • cada detalhe é único</span><h1 className="mt-5 font-serif text-4xl leading-tight sm:text-5xl">Seu momento especial começa aqui.</h1><p className="mt-4 text-sm leading-7 text-white/90 sm:text-base">Convites digitais e produtos personalizados para transformar suas celebrações em memórias inesquecíveis.</p><a href="#produtos" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#75152F] shadow-lg">Comprar agora <ArrowRight size={18}/></a></div>
+          <span className="pointer-events-none absolute bottom-6 right-6 hidden rotate-[-12deg] text-8xl drop-shadow-xl sm:block" aria-hidden="true">💌</span>
         </div>
-        {searchOpen && <div className="mx-auto max-w-7xl px-5 pb-4 lg:px-8"><label htmlFor="site-search" className="sr-only">Buscar produtos</label><input id="site-search" type="search" placeholder="Em breve: encontre o seu personalizado..." disabled className="w-full rounded-xl border border-[#e6d3d8] bg-white px-4 py-3 text-sm disabled:opacity-75"/><p className="mt-1 text-xs text-[#78696d]">A busca será ativada quando o catálogo estiver conectado.</p></div>}
-        {menuOpen && <nav aria-label="Menu móvel" className="flex flex-col gap-1 border-t border-[#eadbdc] px-5 py-3 lg:hidden">{[["Início","#inicio"],["Categorias","#categorias"],["Produtos","#vitrine"],["Como funciona","#como-funciona"],["Sobre nós","#sobre"]].map(([name,href])=><a key={href} href={href} onClick={()=>setMenuOpen(false)} className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-[#f8e7ea]">{name}</a>)}</nav>}
-      </header>
-
-      <main id="inicio">
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#f9e6e9] via-[#FFF8F6] to-[#e9f0e8]">
-          <div className="pointer-events-none absolute -right-24 -top-28 h-96 w-96 rounded-full bg-[#f4c9d1]/40 blur-3xl"/>
-          <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 md:grid-cols-2 md:py-24 lg:px-8">
-            <div className="relative z-10">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#e5bdc7] bg-white/75 px-4 py-2 text-xs font-semibold tracking-wide text-[#75152F]"><Sparkles size={15}/> Personalização com carinho</span>
-              <h1 className="mt-7 max-w-xl font-serif text-5xl leading-[1.08] tracking-tight text-[#75152F] sm:text-6xl lg:text-7xl">Momentos únicos merecem <em className="font-normal text-[#819B87]">detalhes únicos.</em></h1>
-              <p className="mt-6 max-w-lg text-base leading-8 text-[#68565c] sm:text-lg">Convites digitais e personalizados feitos para transformar suas ideias em lembranças inesquecíveis.</p>
-              <div className="mt-8 flex flex-wrap gap-3"><a href="#categorias" className="inline-flex items-center gap-2 rounded-full bg-[#75152F] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#75152F]/15 transition hover:bg-[#5e1026]">Conheça nossas criações <ArrowRight size={17}/></a><a href="#como-funciona" className="inline-flex items-center gap-2 rounded-full border border-[#75152F]/25 bg-white/80 px-7 py-3.5 text-sm font-semibold text-[#75152F] transition hover:bg-white">Como funciona</a></div>
-              <p className="mt-8 flex items-center gap-2 text-sm text-[#78666c]"><Heart size={16} className="text-[#b96d7c]"/> Feito com cuidado, pensado para você.</p>
-            </div>
-            <div className="relative mx-auto flex aspect-square w-full max-w-[500px] items-center justify-center">
-              <div className="absolute inset-8 rotate-6 rounded-[3rem] bg-[#819B87]/20"/>
-              <div className="absolute inset-12 -rotate-6 rounded-[3rem] bg-[#f2bac5]/50"/>
-              <div className="relative flex h-[78%] w-[76%] flex-col items-center justify-center rounded-[2.5rem] border border-white/80 bg-gradient-to-br from-[#fffdf9] to-[#f5dce1] p-8 text-center shadow-2xl shadow-[#75152F]/10">
-                <span className="text-6xl sm:text-8xl" role="img" aria-label="Envelope com coração">💌</span>
-                <div className="mt-6 font-serif text-3xl italic text-[#75152F] sm:text-4xl">Um convite<br/>especial</div>
-                <div className="my-5 h-px w-24 bg-[#b88896]"/><p className="text-xs uppercase tracking-[0.3em] text-[#819B87]">para celebrar a vida</p>
-              </div>
-              <div className="absolute bottom-5 left-0 rounded-2xl bg-white px-5 py-4 shadow-xl shadow-[#75152F]/10"><span className="text-xl">🎀</span><span className="ml-2 text-sm font-semibold text-[#75152F]">Feito para encantar</span></div>
-              <div className="absolute right-0 top-10 rounded-2xl bg-[#819B87] px-4 py-3 text-sm font-semibold text-white shadow-lg">Cada detalhe é único ✨</div>
-            </div>
-          </div>
-        </section>
-
-        <section id="categorias" className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-          <div className="mb-10 text-center"><span className="text-xs font-bold uppercase tracking-[0.24em] text-[#819B87]">Feito para cada ocasião</span><h2 className="mt-3 font-serif text-4xl text-[#75152F] sm:text-5xl">Encontre seu momento especial</h2><p className="mt-3 text-[#78666c]">Um universo de possibilidades para celebrar do seu jeito.</p></div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">{categories.map((item)=><a key={item.name} href="#vitrine" className="group rounded-3xl border border-[#f0e2e3] bg-white p-3 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"><div className={`flex aspect-square items-center justify-center rounded-2xl text-5xl transition group-hover:scale-[1.02] ${item.tone}`}>{item.emoji}</div><h3 className="mt-4 text-sm font-bold text-[#75152F]">{item.name}</h3><p className="mb-2 mt-1 text-xs text-[#8b7b7e]">{item.note}</p></a>)}</div>
-        </section>
-
-        <section id="vitrine" className="bg-white/75 py-20">
-          <div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="mb-9 flex flex-wrap items-end justify-between gap-4"><div><span className="text-xs font-bold uppercase tracking-[0.24em] text-[#819B87]">Inspirações</span><h2 className="mt-3 font-serif text-4xl text-[#75152F] sm:text-5xl">Criações para se apaixonar</h2><p className="mt-3 text-sm text-[#78666c]">Prévia ilustrativa da vitrine. Produtos e preços reais serão cadastrados no painel.</p></div><a href="#como-funciona" className="inline-flex items-center gap-2 text-sm font-bold text-[#75152F]">Saiba mais <ArrowRight size={17}/></a></div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">{showcases.map((item)=><article key={item.name} className="overflow-hidden rounded-3xl border border-[#eee2e3] bg-[#fffaf9]"><div className={`flex aspect-[4/4.5] items-center justify-center bg-gradient-to-br text-7xl ${item.bg}`}><span role="img" aria-label={item.name}>{item.emoji}</span></div><div className="p-4"><span className="text-xs font-semibold text-[#819B87]">{item.category}</span><h3 className="mt-1 text-sm font-bold text-[#4c343d] sm:text-base">{item.name}</h3><p className="mt-3 text-xs text-[#8b7b7e]">Exemplo de categoria</p></div></article>)}</div></div>
-        </section>
-
-        <section id="como-funciona" className="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div className="text-center"><span className="text-xs font-bold uppercase tracking-[0.24em] text-[#819B87]">Simples e especial</span><h2 className="mt-3 font-serif text-4xl text-[#75152F]">Como funciona?</h2></div><div className="mt-12 grid gap-6 md:grid-cols-3">{[{icon:<Search size={26}/>,title:"Escolha seu favorito",text:"Explore nossas categorias e encontre a ideia perfeita para a sua ocasião."},{icon:<MessageCircle size={26}/>,title:"Conte seus detalhes",text:"Compartilhe as informações para personalizarmos tudo com o seu estilo."},{icon:<Gift size={26}/>,title:"Celebre do seu jeito",text:"Receba seu convite digital ou combine a retirada do seu produto físico em Salvador."}].map((step,i)=><div key={step.title} className="relative rounded-3xl border border-[#f0e0e3] bg-white p-8 text-center shadow-sm"><div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f8e5e9] text-[#75152F]">{step.icon}</div><span className="mt-5 block text-xs font-bold tracking-widest text-[#819B87]">PASSO 0{i+1}</span><h3 className="mt-2 font-serif text-2xl text-[#75152F]">{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#78666c]">{step.text}</p></div>)}</div></section>
-
-        <section id="sobre" className="bg-[#819B87] px-5 py-16 text-center text-white"><div className="mx-auto max-w-3xl"><Sparkles size={30} className="mx-auto text-[#fce2e8]"/><h2 className="mt-5 font-serif text-4xl sm:text-5xl">Mais que produtos, memórias.</h2><p className="mt-5 text-base leading-8 text-white/90">Na Personalizê, acreditamos que cada celebração tem uma história. Nosso carinho está em transformar os pequenos detalhes em grandes lembranças.</p><p className="mt-6 font-serif text-2xl italic">Cada detalhe é único.</p></div></section>
-      </main>
-
-      <footer className="bg-[#461222] px-5 py-12 text-white"><div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3 lg:px-3"><div><p className="text-3xl font-extrabold tracking-tight">Personalizê<span className="text-[#F29BAA]">✦</span></p><p className="mt-3 max-w-xs text-sm leading-7 text-white/70">Convites digitais e personalizados feitos com amor para celebrar sua história.</p></div><div><h3 className="font-bold">Explore</h3><div className="mt-4 flex flex-col gap-3 text-sm text-white/75"><a href="#categorias">Categorias</a><a href="#vitrine">Produtos</a><a href="#como-funciona">Como funciona</a></div></div><div><h3 className="font-bold">Informações</h3><p className="mt-4 flex items-center gap-2 text-sm text-white/75"><Package size={16}/> Produtos físicos: retirada em Salvador — BA</p><p className="mt-3 text-sm text-white/60">Contato, redes sociais e políticas serão configurados no painel administrativo.</p></div></div><div className="mx-auto mt-10 max-w-7xl border-t border-white/15 pt-6 text-center text-xs text-white/60">© {new Date().getFullYear()} Personalizê · Cada detalhe é único.</div></footer>
-    </div>
-  );
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-1">
+          <a href="#produtos" onClick={()=>setCategory("Convites digitais")} className="flex min-h-[150px] items-center justify-between overflow-hidden rounded-[25px] bg-[#e8eee4] p-5 sm:p-7"><div><span className="text-xs font-bold uppercase tracking-wide text-[#647d6c]">Novidade</span><h2 className="mt-2 font-serif text-xl font-bold text-[#496452] sm:text-3xl">Convites digitais</h2><span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#496452]">Ver opções <ChevronRight size={15}/></span></div><span className="text-5xl sm:text-7xl">💌</span></a>
+          <a href="#produtos" onClick={()=>setCategory("Personalizados")} className="flex min-h-[150px] items-center justify-between overflow-hidden rounded-[25px] bg-[#f8e0e5] p-5 sm:p-7"><div><span className="text-xs font-bold uppercase tracking-wide text-[#9d5266]">Feito para você</span><h2 className="mt-2 font-serif text-xl font-bold text-[#75152F] sm:text-3xl">Personalizados</h2><span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#75152F]">Explorar <ChevronRight size={15}/></span></div><span className="text-5xl sm:text-7xl">🎁</span></a>
+        </div>
+      </section>
+      <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 pb-10 sm:grid-cols-3 lg:grid-cols-4 lg:px-8">{[{icon:"💖",title:"Feito com carinho",text:"Cada detalhe pensado para você"},{icon:"💌",title:"Convites digitais",text:"Praticidade para compartilhar"},{icon:"🎨",title:"Personalize do seu jeito",text:"Sua ideia, seu estilo"},{icon:"📍",title:"Retirada em Salvador",text:"Produtos físicos sob encomenda"}].map(item=><div key={item.title} className="flex items-start gap-3 rounded-2xl border border-[#efe1e3] bg-white p-4"><span className="text-2xl">{item.icon}</span><div><h3 className="text-xs font-bold text-[#75152F] sm:text-sm">{item.title}</h3><p className="mt-1 text-xs leading-5 text-[#86767b]">{item.text}</p></div></div>)}</section>
+      <section id="categorias" className="mx-auto max-w-7xl px-4 pb-12 lg:px-8"><div className="mb-5 flex items-end justify-between"><div><span className="text-xs font-bold uppercase tracking-[.2em] text-[#819B87]">Encontre o que procura</span><h2 className="mt-2 font-serif text-3xl text-[#75152F] sm:text-4xl">Compre por categoria</h2></div><a href="#produtos" className="hidden items-center gap-1 text-sm font-bold text-[#75152F] sm:inline-flex">Ver tudo <ArrowRight size={17}/></a></div><div className="grid grid-cols-3 gap-3 sm:grid-cols-6">{[{name:"Convites digitais",icon:"💌"},{name:"Aniversário",icon:"🎂"},{name:"Casamento",icon:"💍"},{name:"Chá de bebê",icon:"🧸"},{name:"Personalizados",icon:"🎁"},{name:"Papelaria",icon:"🎀"}].map(item=><a key={item.name} href="#produtos" onClick={()=>setCategory(item.name)} className="rounded-2xl border border-[#eee0e2] bg-white p-3 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-md"><div className="flex aspect-square items-center justify-center rounded-xl bg-[#f8e9ec] text-4xl sm:text-5xl">{item.icon}</div><p className="mt-3 text-xs font-bold text-[#75152F] sm:text-sm">{item.name}</p></a>)}</div></section>
+      <section id="produtos" className="bg-white/80 py-12"><div className="mx-auto max-w-7xl px-4 lg:px-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><span className="text-xs font-bold uppercase tracking-[.2em] text-[#819B87]">Nossa vitrine</span><h2 className="mt-2 font-serif text-3xl text-[#75152F] sm:text-4xl">Escolha seu favorito</h2><p className="mt-2 text-sm text-[#85747a]">Catálogo de demonstração — imagens e valores ilustrativos.</p></div><div className="flex items-center gap-2 text-sm text-[#75152F]"><SlidersHorizontal size={18}/> {filtered.length} opções</div></div>
+        <div className="mt-6 flex gap-2 overflow-x-auto pb-3">{categories.map(name=><button key={name} onClick={()=>setCategory(name)} className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold transition ${category===name?"border-[#75152F] bg-[#75152F] text-white":"border-[#e9d9dc] bg-white text-[#654b54] hover:border-[#75152F]"}`}>{name}</button>)}</div>
+        {filtered.length===0?<div className="rounded-2xl bg-[#FFF8F6] p-10 text-center text-[#75152F]">Nenhum produto encontrado. Tente outra busca ou categoria.</div>:<div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">{filtered.map(item=><article key={item.id} className="group overflow-hidden rounded-2xl border border-[#eddee0] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"><div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br text-6xl sm:text-8xl ${item.gradient}`}><span role="img" aria-label={item.name}>{item.emoji}</span>{item.badge&&<span className="absolute left-2 top-2 rounded-full bg-[#75152F] px-2.5 py-1 text-[10px] font-bold text-white sm:left-3 sm:top-3">{item.badge}</span>}<button onClick={()=>setFavorites(current=>current.includes(item.id)?current.filter(id=>id!==item.id):[...current,item.id])} aria-label={favorites.includes(item.id)?"Remover favorito":"Favoritar"} className="absolute right-2 top-2 rounded-full bg-white/95 p-2 text-[#75152F] shadow"><Heart size={17} fill={favorites.includes(item.id)?"currentColor":"none"}/></button></div><div className="p-3 sm:p-4"><p className="text-[11px] font-semibold text-[#819B87]">{item.category}</p><h3 className="mt-1 min-h-10 text-sm font-semibold leading-5 text-[#422e36] sm:text-base">{item.name}</h3><div className="mt-2">{item.old&&<span className="text-xs text-[#a19598] line-through">{money(item.old)}</span>}<p className="text-xl font-extrabold text-[#75152F]">{money(item.price)}</p><p className="mt-1 text-[11px] text-[#87777b]">Preço demonstrativo</p></div><button onClick={()=>{add(item.id);setCartOpen(true)}} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#75152F] px-2 py-3 text-xs font-bold text-white transition hover:bg-[#5b1025] sm:text-sm"><ShoppingBag size={16}/> Adicionar à sacola</button></div></article>)}</div>}
+      </div></section>
+      <section id="como-funciona" className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-16 md:grid-cols-2 lg:px-8"><div className="rounded-3xl bg-[#e7eee7] p-9"><span className="text-xs font-bold uppercase tracking-[.2em] text-[#647e6b]">Sua ideia ganha vida</span><h2 className="mt-3 font-serif text-4xl text-[#75152F]">Personalizado para momentos inesquecíveis.</h2><p className="mt-4 leading-7 text-[#5c6760]">Escolha seu produto, compartilhe os detalhes e acompanhe cada etapa. Convites digitais são enviados online; produtos físicos são retirados em Salvador — BA.</p></div><div className="space-y-4">{[{n:"01",title:"Escolha o produto",text:"Navegue pelo catálogo e selecione o que combina com sua ocasião."},{n:"02",title:"Personalize seu pedido",text:"Informe os detalhes necessários para a criação."},{n:"03",title:"Receba ou retire",text:"Receba o convite digital ou combine a retirada do personalizado."}].map(item=><div key={item.n} className="flex gap-4 rounded-2xl border border-[#eee0e2] bg-white p-5"><span className="font-serif text-3xl text-[#819B87]">{item.n}</span><div><h3 className="font-bold text-[#75152F]">{item.title}</h3><p className="mt-1 text-sm leading-6 text-[#786b70]">{item.text}</p></div></div>)}</div></section>
+      <section id="sobre" className="bg-[#819B87] px-4 py-14 text-center text-white"><div className="mx-auto max-w-2xl"><Sparkles className="mx-auto"/><h2 className="mt-4 font-serif text-4xl">Personalizê</h2><p className="mt-4 leading-7">Cada detalhe é único. Convites digitais e personalizados criados para celebrar a sua história.</p></div></section>
+    </main>
+    <footer className="bg-[#461222] px-4 py-10 text-white"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3"><div><p className="text-2xl font-black">Personalizê ✦</p><p className="mt-2 text-sm text-white/70">Cada detalhe é único.</p></div><div><h3 className="font-bold">Navegue</h3><a href="#categorias" className="mt-3 block text-sm text-white/70">Categorias</a><a href="#produtos" className="mt-2 block text-sm text-white/70">Produtos</a></div><div><h3 className="font-bold">Atendimento</h3><p className="mt-3 flex items-center gap-2 text-sm text-white/70"><MapPin size={16}/> Retirada em Salvador — BA</p><p className="mt-2 text-xs text-white/60">Informações de contato serão configuradas no painel.</p></div></div><p className="mx-auto mt-8 max-w-7xl border-t border-white/20 pt-5 text-center text-xs text-white/60">© {new Date().getFullYear()} Personalizê · Vitrine demonstrativa</p></footer>
+    {cartOpen&&<div className="fixed inset-0 z-50 flex justify-end"><button className="absolute inset-0 bg-black/45" aria-label="Fechar sacola" onClick={()=>setCartOpen(false)}/><aside role="dialog" aria-modal="true" aria-label="Sua sacola" className="relative flex h-full w-full max-w-md flex-col bg-[#fffaf8] shadow-2xl"><div className="flex items-center justify-between border-b border-[#eedfe1] p-5"><h2 className="font-serif text-2xl text-[#75152F]">Sua sacola ({count})</h2><button onClick={()=>setCartOpen(false)} aria-label="Fechar sacola"><X/></button></div><div className="flex-1 space-y-4 overflow-y-auto p-5">{count===0?<p className="py-12 text-center text-[#796a6e]">Sua sacola está vazia. Explore nossos produtos!</p>:items.filter(item=>cart[item.id]).map(item=><div key={item.id} className="flex gap-4 rounded-2xl border border-[#efdee1] bg-white p-3"><div className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-3xl ${item.gradient}`}>{item.emoji}</div><div className="flex-1"><p className="text-sm font-semibold">{item.name}</p><p className="mt-1 text-sm font-bold text-[#75152F]">{money(item.price)}</p><div className="mt-2 flex items-center gap-3"><button aria-label="Diminuir quantidade" onClick={()=>remove(item.id)} className="rounded border p-1"><Minus size={14}/></button><span className="text-sm">{cart[item.id]}</span><button aria-label="Aumentar quantidade" onClick={()=>add(item.id)} className="rounded border p-1"><Plus size={14}/></button><button aria-label="Remover item" onClick={()=>setCart(current=>{const next={...current};delete next[item.id];return next})} className="ml-auto text-[#75152F]"><Trash2 size={16}/></button></div></div></div>)}</div><div className="border-t border-[#eedfe1] p-5"><div className="flex justify-between font-bold"><span>Subtotal demonstrativo</span><span>{money(total)}</span></div><p className="mt-2 text-xs leading-5 text-[#87777b]">Esta é uma prévia de interface. O checkout, cadastro, pagamento e armazenamento serão implementados em etapas posteriores.</p><button disabled className="mt-4 w-full rounded-xl bg-[#75152F] px-5 py-3.5 font-bold text-white opacity-60">Finalizar pedido — em breve</button></div></aside></div>}
+  </div>;
 }
