@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, BarChart3, Bell, CalendarDays, ChevronRight, ClipboardList, CreditCard, FileText, Gift, Image, LayoutDashboard, LockKeyhole, Menu, Package, Palette, Settings, ShoppingBag, Tag, Users, Wallet, X } from "lucide-react";
+import { ArrowLeft, BarChart3, Bell, CalendarDays, ChevronRight, ClipboardList, CreditCard, Gift, Image, LayoutDashboard, LockKeyhole, Menu, Package, Palette, Settings, ShoppingBag, Tag, Users, Wallet, X } from "lucide-react";
 
 export const Route = createFileRoute("/administrador")({ component: AdminEntry });
 
