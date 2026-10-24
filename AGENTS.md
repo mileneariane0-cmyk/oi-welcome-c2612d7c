@@ -8,3 +8,9 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the storefront demo catalog separate from persisted platform records so infrastructure setup never seeds fictitious business data.
+- Put the admin panel under the authenticated layout; verify administrator roles in its gate, server functions and database/storage policies because UI protection alone is insufficient.
+- Keep profile fields in profiles and permissions in user_roles; only trusted Cloud account provisioning grants the initial administrator role.
+- Use the shared BrandLogo with the immutable original asset pointer, resizing proportionally and using a light footer backing for legibility.
+- Keep future platform tables admin-only until their public/customer workflows are implemented with narrow access policies.
