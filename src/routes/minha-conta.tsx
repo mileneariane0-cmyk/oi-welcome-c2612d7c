@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowLeft, Eye, EyeOff, LogIn, Mail, UserRound } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
@@ -11,7 +11,6 @@ export const Route = createFileRoute("/minha-conta")({
 });
 
 function CustomerAccount() {
-  const navigate = useNavigate();
   const [userId,setUserId] = useState<string|null>(null);
   const [email,setEmail] = useState("");
   const [name,setName] = useState("");
