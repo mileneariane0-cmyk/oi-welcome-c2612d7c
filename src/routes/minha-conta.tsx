@@ -34,7 +34,6 @@ function CustomerAccount() {
     if(!email.trim()||!email.includes("@")){setMessage("Informe um e-mail válido.");return;}
     if(mode!=="forgot"&&password.length<8){setMessage("A senha precisa ter pelo menos 8 caracteres.");return;}
     if(mode==="signup"&&(!name.trim()||name.trim().length>100)){setMessage("Informe seu nome (até 100 caracteres).");return;}
-    if(mode==="signup"&&birthday&&(!/^\\d{4}-\\d{2}-\\d{2}$/.test(birthday)||new Date(birthday+"T12:00:00").toISOString().slice(0,10)!==birthday||birthday>new Date().toISOString().slice(0,10))){setMessage("Informe uma data de aniversário válida.");return;}
     if(mode==="signup"&&password!==confirm){setMessage("As senhas não coincidem.");return;}
     setBusy(true);
     try{
