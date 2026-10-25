@@ -1,10 +1,11 @@
+// @vitest-environment node
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const db = new PGlite();
 const authorized = 'arianeararagaocomercial@gmail.com';
-const migration = readFileSync(new URL('../../drizzle/migrations/0002_authorized_admin_email.sql', import.meta.url), 'utf8');
+const migration = readFileSync('drizzle/migrations/0002_authorized_admin_email.sql', 'utf8');
 
 describe('Database administrator email authorization', () => {
   beforeAll(async () => {
