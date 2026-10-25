@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/minha-conta")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Minha conta | Personalizê" }, { name: "robots", content: "noindex, nofollow" }] }),
+  head: () => ({ meta: [{ title: "Minha conta | Personalizê" }, { name: "description", content: "Acesse sua conta de cliente na Personalizê." }, { property: "og:title", content: "Minha conta | Personalizê" }, { property: "og:description", content: "Acesse sua conta de cliente na Personalizê." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: CustomerAccount,
 });
 
@@ -27,7 +27,7 @@ function CustomerAccount() {
   const [loading,setLoading] = useState(true);
   const [message,setMessage] = useState("");
   useEffect(()=>{
-    const syncUser=(user: {id:string;email?:string;user_metadata?:Record<string,unknown>}|null|undefined)=>{setUserId(user?.id??null);setEmail(user?.email??"");setAccountName(typeof user?.user_metadata?.display_name==="string"?user.user_metadata.display_name:"");setName(typeof user?.user_metadata?.display_name==="string"?user.user_metadata.display_name:"");setWhatsapp(typeof user?.user_metadata?.whatsapp==="string"?user.user_metadata.whatsapp:"");setBirthday(typeof user?.user_metadata?.birthday==="string"?user.user_metadata.birthday:"");setGender(typeof user?.user_metadata?.gender==="string"?user.user_metadata.gender:"");setGenderOther(typeof user?.user_metadata?.gender_other==="string"?user.user_metadata.gender_other:"");};
+    const syncUser=(user: {id:string;email?:string;user_metadata?:Record<string,unknown>}|null|undefined)=>{setUserId(user?.id??null);setEmail(user?.email??"");setAccountName(typeof user?.user_metadata?.['display_name']==="string"?user.user_metadata['display_name']:"");setName(typeof user?.user_metadata?.['display_name']==="string"?user.user_metadata['display_name']:"");setWhatsapp(typeof user?.user_metadata?.['whatsapp']==="string"?user.user_metadata['whatsapp']:"");setBirthday(typeof user?.user_metadata?.['birthday']==="string"?user.user_metadata['birthday']:"");setGender(typeof user?.user_metadata?.['gender']==="string"?user.user_metadata['gender']:"");setGenderOther(typeof user?.user_metadata?.['gender_other']==="string"?user.user_metadata['gender_other']:"");};
     let mounted=true;
     supabase.auth.getUser().then(({data})=>{if(mounted){syncUser(data.user);setLoading(false);}});
     const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{if(mounted){syncUser(session?.user);}});
@@ -58,7 +58,7 @@ function CustomerAccount() {
     }catch{setMessage("Não foi possível concluir. Confira os dados e tente novamente.");}
     finally{setBusy(false);}
   }
-  async function saveProfile(e:FormEvent<HTMLFormElement>){e.preventDefault();setMessage("");if(!name.trim()){setMessage("Informe seu nome.");return;}setBusy(true);const {data,error}=await supabase.auth.updateUser({data:{display_name:name.trim(),whatsapp:whatsapp.replace(/\D/g,"")||null,birthday:birthday||null}});if(error)setMessage("Não foi possível salvar seus dados. Tente novamente.");else{setAccountName(typeof data.user.user_metadata?.display_name==="string"?data.user.user_metadata.display_name:name.trim());setMessage("Seus dados foram atualizados!");}setBusy(false);}
+  async function saveProfile(e:FormEvent<HTMLFormElement>){e.preventDefault();setMessage("");if(!name.trim()){setMessage("Informe seu nome.");return;}setBusy(true);const {data,error}=await supabase.auth.updateUser({data:{display_name:name.trim(),whatsapp:whatsapp.replace(/\D/g,"")||null,birthday:birthday||null}});if(error)setMessage("Não foi possível salvar seus dados. Tente novamente.");else{setAccountName(typeof data.user.user_metadata?.['display_name']==="string"?data.user.user_metadata['display_name']:name.trim());setMessage("Seus dados foram atualizados!");}setBusy(false);}
   async function signOut(){await supabase.auth.signOut();setUserId(null);setPassword("");setMessage("");}
   return <main className="min-h-screen bg-[#FFF8F6] px-4 py-8 text-[#30272B]">
     <div className="mx-auto max-w-xl"><a href="/" className="mb-7 inline-flex items-center gap-2 text-sm font-semibold text-[#75152F]"><ArrowLeft size={17}/> Voltar à loja</a><section className="rounded-3xl border border-[#ead9dd] bg-white p-6 shadow-sm sm:p-9">

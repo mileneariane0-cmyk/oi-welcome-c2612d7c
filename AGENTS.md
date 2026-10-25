@@ -11,6 +11,8 @@
 
 - Keep the storefront demo catalog separate from persisted platform records so infrastructure setup never seeds fictitious business data.
 - Put the admin panel under the authenticated layout; verify administrator roles in its gate, server functions and database/storage policies because UI protection alone is insufficient.
-- Keep profile fields in profiles and permissions in user_roles; only trusted Cloud account provisioning grants the initial administrator role.
+- Keep profile fields in profiles and permissions in user_roles; the Auth lifecycle trigger grants administrator only to the confirmed authorized mailbox, keeping authorization out of editable client metadata.
+- Capture invitation/recovery intent before Auth clears URL fragments and use the root Auth subscriber for password recovery navigation; never persist link tokens or add competing recovery listeners.
+- Test database authorization triggers in isolated PGlite PostgreSQL so security checks never create fictitious hosted accounts.
 - Use the shared BrandLogo with the immutable original asset pointer, resizing proportionally and using a light footer backing for legibility.
 - Keep future platform tables admin-only until their public/customer workflows are implemented with narrow access policies.

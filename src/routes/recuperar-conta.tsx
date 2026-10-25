@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
-export const Route=createFileRoute("/recuperar-conta")({ssr:false,component:Recovery,head:()=>({meta:[{title:"Recuperar conta | Personalizê"},{name:"robots",content:"noindex, nofollow"}]})});
+export const Route=createFileRoute("/recuperar-conta")({ssr:false,component:Recovery,head:()=>({meta:[{title:"Recuperar conta | Personalizê"},{name:"description",content:"Recupere o acesso à sua conta de cliente na Personalizê."},{property:"og:title",content:"Recuperar conta | Personalizê"},{property:"og:description",content:"Recupere o acesso à sua conta de cliente na Personalizê."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary"},{name:"robots",content:"noindex, nofollow"}]})});
 function Recovery(){
  const [ready,setReady]=useState(false),[password,setPassword]=useState(""),[confirm,setConfirm]=useState(""),[busy,setBusy]=useState(false),[message,setMessage]=useState("Verificando o link...");
  useEffect(()=>{let active=true;const check=async()=>{const {data}=await supabase.auth.getUser();if(!active)return;if(data.user){setReady(true);setMessage("");}else setMessage("Link inválido ou expirado. Solicite um novo link em Minha Conta.");};void check();const {data:{subscription}}=supabase.auth.onAuthStateChange((event,session)=>{if(active&&event==="PASSWORD_RECOVERY"&&session){setReady(true);setMessage("");}});return()=>{active=false;subscription.unsubscribe()};},[]);

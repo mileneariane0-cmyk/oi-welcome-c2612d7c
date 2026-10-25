@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
+import { passwordLinkType } from '@/lib/password-link';
 
 function NotFoundComponent() {
   return (
@@ -119,10 +120,25 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   useEffect(() => {
+    const type = passwordLinkType(window.location.hash);
+    if (type) {
+      window.sessionStorage.setItem('personalize-password-link', type);
+      if (window.location.pathname !== '/reset-password' && window.location.pathname !== '/recuperar-conta') {
+        void router.navigate({ to: '/reset-password', replace: true });
+      }
+    }
     const { data } = supabase.auth.onAuthStateChange(event => {
+      if (event === 'PASSWORD_RECOVERY') {
+        window.sessionStorage.setItem('personalize-password-link', 'recovery');
+        if (window.location.pathname !== '/reset-password' && window.location.pathname !== '/recuperar-conta') {
+          void router.navigate({ to: '/reset-password', replace: true });
+        }
+        return;
+      }
       if (event !== 'SIGNED_IN' && event !== 'SIGNED_OUT' && event !== 'USER_UPDATED') return;
       void router.invalidate();
       if (event !== 'SIGNED_OUT') void queryClient.invalidateQueries();
+      else window.sessionStorage.removeItem('personalize-password-link');
     });
     return () => data.subscription.unsubscribe();
   }, [router, queryClient]);

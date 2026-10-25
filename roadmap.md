@@ -4,5 +4,8 @@
 - [x] Preparar arquivos públicos e privados com limites e controles.
 - [x] Proteger administrador, login, recuperação e saída.
 - [x] Verificar site público, acesso de visitantes e regras; documentar configuração em CONFIGURACAO-ETAPA-2.md.
-- [ ] Criar primeiro administrador e verificar entrada, saída e recuperação completas — depende da conta real criada pela usuária e do e-mail escolhido.
+- [x] Verificar e aplicar a autorização administrativa para o e-mail confirmado indicado no documento.
+- [x] Preparar recebimento de convite seguro para definição da senha sem expor o e-mail autorizado.
+- [x] Verificar bloqueio de visitantes, ausência de cadastro administrativo e regras para e-mails não autorizados em banco isolado.
+- [ ] Enviar convite e verificar confirmação, definição de senha, entrada/saída da conta autorizada e entrega da recuperação — depende de Mais → Usuários → Adicionar usuário → Enviar convite e da aceitação pela usuária.
 - [ ] Desativar cadastro geral — depende da configuração em Mais → Usuários → Configurações de autenticação; não foi possível ler todos os parâmetros exigidos para alterar com segurança.
