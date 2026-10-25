@@ -15,6 +15,13 @@
       "when": 1792881306883,
       "tag": "0001_restrict_profile_trigger_execution",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792891795567,
+      "tag": "0002_authorized_admin_email",
+      "breakpoints": true
     }
   ]
 }
