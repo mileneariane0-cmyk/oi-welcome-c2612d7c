@@ -34,7 +34,6 @@ function CustomerAccount() {
     if(!email.trim()||!email.includes("@")){setMessage("Informe um e-mail válido.");return;}
     if(mode!=="forgot"&&password.length<8){setMessage("A senha precisa ter pelo menos 8 caracteres.");return;}
     if(mode==="signup"&&(!name.trim()||name.trim().length>100)){setMessage("Informe seu nome (até 100 caracteres).");return;}
-    if(mode==="signup"&&whatsapp.replace(/\\D/g,"").length>0&&!/^\\d{10,11}$/.test(whatsapp.replace(/\\D/g,""))){setMessage("Informe um WhatsApp válido com DDD ou deixe o campo em branco.");return;}
     if(mode==="signup"&&birthday&&(!/^\\d{4}-\\d{2}-\\d{2}$/.test(birthday)||new Date(birthday+"T12:00:00").toISOString().slice(0,10)!==birthday||birthday>new Date().toISOString().slice(0,10))){setMessage("Informe uma data de aniversário válida.");return;}
     if(mode==="signup"&&password!==confirm){setMessage("As senhas não coincidem.");return;}
     setBusy(true);
@@ -44,7 +43,7 @@ function CustomerAccount() {
         if(error)throw error;
         setMessage("Se o e-mail estiver cadastrado, você receberá instruções para recuperar sua senha.");
       }else if(mode==="signup"){
-        const {data,error}=await supabase.auth.signUp({email:email.trim(),password,options:{data:{display_name:name.trim(),whatsapp:whatsapp.replace(/\\D/g,"")||null,birthday:birthday||null},emailRedirectTo:`${window.location.origin}/minha-conta`}});
+        const {data,error}=await supabase.auth.signUp({email:email.trim(),password,options:{data:{display_name:name.trim(),whatsapp:whatsapp.replace(/\D/g,"")||null,birthday:birthday||null},emailRedirectTo:`${window.location.origin}/minha-conta`}});
         if(error)throw error;
         if(data.session){setUserId(data.user?.id??null);setMessage("Cadastro realizado!");}
         else setMessage("Cadastro solicitado. Confira seu e-mail para confirmar a conta, se necessário.");
