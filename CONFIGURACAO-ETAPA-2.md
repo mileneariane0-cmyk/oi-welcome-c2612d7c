@@ -27,10 +27,10 @@ Limites de tamanho configurados nas áreas. Formatos são restringidos por exten
 
 ## Configuração necessária do primeiro administrador
 1. Em **Mais → Usuários → Configurações de autenticação**, ative **Desativar cadastro**. O cadastro geral ainda estava permitido na consulta realizada; não existe formulário de cadastro no site e nenhum cadastro atribui permissão administrativa.
-2. Em **Mais → Usuários → Adicionar usuário → Criar novo usuário**, crie sua conta usando seu e-mail real e uma senha exclusiva. Não envie a senha pelo chat.
-3. Informe no chat somente o e-mail da conta criada para atribuir a permissão administrativa por uma operação controlada. Nenhum e-mail foi presumido e nenhum acesso padrão foi criado.
+2. Em **Mais → Usuários → Adicionar usuário → Enviar convite**, informe o e-mail autorizado no documento privado. O convite permite confirmar a caixa postal e definir a senha; não use criação com senha fixa ou confirmação manual.
+3. A migração `0002_authorized_admin_email.sql` foi aplicada e a função e o gatilho foram consultados no banco. O gatilho concede a permissão somente ao e-mail autorizado confirmado, e a revoga se o e-mail mudar. Não há conta autorizada nem permissões administrativas existentes na consulta desta etapa.
 4. Confira em **Configurações de autenticação → Avançado** se a lista de destinos permitidos inclui o endereço público da página `/reset-password` do site que será usado.
-5. Depois da conta e da permissão, verificar entrada, indicadores e saída usando essa conta. A recuperação completa também precisa de um link recebido no e-mail real.
+5. O convite que chega à página inicial é direcionado para a definição de senha. Depois de aceitar o convite, definir a senha e confirmar a caixa postal, verificar entrada, indicadores e saída usando essa conta. A recuperação completa também precisa de um link recebido no e-mail real.
 
 ## Limites da verificação
 - Entrada administrativa autenticada: **NÃO VERIFICADA**, pois ainda não existe conta administrativa.
