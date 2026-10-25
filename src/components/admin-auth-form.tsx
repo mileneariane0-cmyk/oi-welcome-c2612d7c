@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { BrandLogo } from './brand-logo';
 import { isAdministrator } from '@/lib/admin-access';
+import { passwordLinkType } from '@/lib/password-link';
 
 const emailSchema = z.string().trim().email().max(255);
 const loginSchema = z.object({ email: emailSchema, password: z.string().min(1).max(256) });
@@ -24,14 +25,17 @@ export function AdminAuthForm({ denied = false, recovery = false }: { denied?: b
 
   useEffect(() => {
     if (!recovery) return;
-    const hash = new URLSearchParams(window.location.hash.slice(1));
-    const type = hash.get('type');
+    const type = passwordLinkType(window.location.hash) ?? window.sessionStorage.getItem('personalize-password-link');
+    let active = true;
     async function validateLink() {
-      const { data } = await supabase.auth.getUser();
-      setRecoveryReady(Boolean(data.user) && (type === 'recovery' || type === 'invite'));
-      if (!data.user || (type !== 'recovery' && type !== 'invite')) setMessage('O link é inválido ou expirou. Solicite um novo link de recuperação.');
+      const { data, error } = await supabase.auth.getUser();
+      if (!active) return;
+      const valid = !error && Boolean(data.user?.email_confirmed_at) && (type === 'recovery' || type === 'invite');
+      setRecoveryReady(valid);
+      if (!valid) setMessage('O link é inválido ou expirou. Solicite um novo link de recuperação.');
     }
     void validateLink();
+    return () => { active = false; };
   }, [recovery]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -49,6 +53,7 @@ export function AdminAuthForm({ denied = false, recovery = false }: { denied?: b
       if (recovery) {
         const { error } = await supabase.auth.updateUser({ password });
         if (error) throw new Error('Não foi possível atualizar a senha. Verifique os requisitos ou solicite outro link.');
+        window.sessionStorage.removeItem('personalize-password-link');
         await supabase.auth.signOut();
         setComplete(true);
         setMessage('Senha atualizada. Entre novamente com sua nova senha.');
