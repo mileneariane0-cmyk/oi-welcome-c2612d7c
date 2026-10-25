@@ -6,7 +6,7 @@
 - Loja pública, pesquisa de produtos e sacola demonstrativa verificadas no navegador; comparação visual realizada em computador e celular.
 - `/administrador` redireciona visitantes para o login. O acesso exige sessão válida e permissão administrativa consultada no banco. Operações do painel e arquivos também exigem essa permissão.
 - Nenhum cliente, pedido, pagamento ou administrador fictício criado.
-- Testes de autorização e roteamento: 4 aprovados. Verificação de compilação: sem erros.
+- Testes de autorização, regras de e-mail em banco isolado, links de senha e roteamento: 12 aprovados. Verificação de compilação: sem erros.
 
 ## Estrutura criada — 19 tabelas
 Perfis (`profiles`), permissões (`user_roles`), clientes (`customers`), categorias (`categories`), produtos (`products`), mídias (`product_media`), variações (`product_variants`), pedidos (`orders`), itens (`order_items`), pagamentos (`payments`), comprovantes (`payment_proofs`), orçamentos (`quotes`), cupons (`coupons`), banners (`banners`), configurações (`store_settings`), páginas de convites (`invitation_pages`), mídias de convites (`invitation_media`), confirmações de presença (`rsvp_responses`) e arquivos de clientes (`customer_files`).
@@ -35,7 +35,8 @@ Limites de tamanho configurados nas áreas. Formatos são restringidos por exten
 ## Limites da verificação
 - Entrada administrativa autenticada: **NÃO VERIFICADA**, pois ainda não existe conta administrativa.
 - Bloqueio de visitantes: **VERIFICADO** no navegador.
-- Permissão de contas comuns: regras e testes locais verificados; tentativa com conta real ainda pendente.
+- Permissão de contas comuns: gatilho aplicado no banco e testado em PostgreSQL isolado (e-mail diferente confirmado não recebe administrador; e-mail autorizado não confirmado também não). Tentativa com conta real ainda pendente.
+- Cadastro público de administrador: não existe no formulário administrativo; e-mail não vem preenchido. Cadastro de clientes existente foi preservado, separado da autorização administrativa.
 - Recuperação: formulário e bloqueio de link inválido verificados; entrega do e-mail e atualização com link real ainda pendentes.
 - Cadastro geral desativado: **PENDENTE** da configuração acima.
 - A análise de segurança do banco deixou apenas o aviso intencional da consulta de permissões acessível a usuários autenticados; ela só consulta as permissões da própria sessão.
