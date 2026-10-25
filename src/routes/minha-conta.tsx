@@ -14,6 +14,8 @@ function CustomerAccount() {
   const [userId,setUserId] = useState<string|null>(null);
   const [email,setEmail] = useState("");
   const [name,setName] = useState("");
+  const [whatsapp,setWhatsapp] = useState("");
+  const [birthday,setBirthday] = useState("");
   const [password,setPassword] = useState("");
   const [confirm,setConfirm] = useState("");
   const [showPassword,setShowPassword] = useState(false);
@@ -32,6 +34,8 @@ function CustomerAccount() {
     if(!email.trim()||!email.includes("@")){setMessage("Informe um e-mail válido.");return;}
     if(mode!=="forgot"&&password.length<8){setMessage("A senha precisa ter pelo menos 8 caracteres.");return;}
     if(mode==="signup"&&(!name.trim()||name.trim().length>100)){setMessage("Informe seu nome (até 100 caracteres).");return;}
+    if(mode==="signup"&&whatsapp.replace(/\\D/g,"").length>0&&!/^\\d{10,11}$/.test(whatsapp.replace(/\\D/g,""))){setMessage("Informe um WhatsApp válido com DDD ou deixe o campo em branco.");return;}
+    if(mode==="signup"&&birthday&&(!/^\\d{4}-\\d{2}-\\d{2}$/.test(birthday)||new Date(birthday+"T12:00:00").toISOString().slice(0,10)!==birthday||birthday>new Date().toISOString().slice(0,10))){setMessage("Informe uma data de aniversário válida.");return;}
     if(mode==="signup"&&password!==confirm){setMessage("As senhas não coincidem.");return;}
     setBusy(true);
     try{
@@ -40,7 +44,7 @@ function CustomerAccount() {
         if(error)throw error;
         setMessage("Se o e-mail estiver cadastrado, você receberá instruções para recuperar sua senha.");
       }else if(mode==="signup"){
-        const {data,error}=await supabase.auth.signUp({email:email.trim(),password,options:{data:{display_name:name.trim()},emailRedirectTo:`${window.location.origin}/minha-conta`}});
+        const {data,error}=await supabase.auth.signUp({email:email.trim(),password,options:{data:{display_name:name.trim(),whatsapp:whatsapp.replace(/\\D/g,"")||null,birthday:birthday||null},emailRedirectTo:`${window.location.origin}/minha-conta`}});
         if(error)throw error;
         if(data.session){setUserId(data.user?.id??null);setMessage("Cadastro realizado!");}
         else setMessage("Cadastro solicitado. Confira seu e-mail para confirmar a conta, se necessário.");
@@ -58,6 +62,7 @@ function CustomerAccount() {
     {loading?<p className="text-center text-sm">Carregando sua conta...</p>:userId?<><div className="text-center"><div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#f7e6eb] text-[#75152F]"><UserRound/></div><h1 className="font-serif text-3xl text-[#75152F]">Minha conta</h1><p className="mt-2 break-all text-sm text-[#786970]">{email}</p></div><div className="mt-7 grid gap-3">{[{title:"Meus pedidos",text:"Em breve: acompanhe o andamento dos seus pedidos."},{title:"Meus convites",text:"Em breve: acesse seus convites publicados e confirmações de presença."},{title:"Meus dados",text:"Em breve: gerencie seus dados de contato."}].map(item=><div key={item.title} className="rounded-xl border border-[#eadde0] bg-[#fff9f7] p-4"><h2 className="font-semibold text-[#75152F]">{item.title}</h2><p className="mt-1 text-sm text-[#7b6d72]">{item.text}</p></div>)}</div><button onClick={signOut} className="mt-6 w-full rounded-xl border border-[#75152F] px-5 py-3 text-sm font-bold text-[#75152F]">Sair da conta</button></>:<>
       <h1 className="text-center font-serif text-3xl text-[#75152F]">{mode==="login"?"Entrar na minha conta":mode==="signup"?"Criar minha conta":"Recuperar senha"}</h1><p className="mt-2 text-center text-sm text-[#817177]">{mode==="signup"?"Cadastre-se para acompanhar seus pedidos e convites.":mode==="forgot"?"Enviaremos instruções para seu e-mail.":"Acesse seus pedidos e convites em um só lugar."}</p>
       <form onSubmit={submit} className="mt-7 space-y-4">{mode==="signup"&&<div><label htmlFor="customer-name" className="mb-1 block text-sm font-semibold">Nome completo</label><input id="customer-name" required maxLength={100} value={name} onChange={e=>setName(e.target.value)} autoComplete="name" className="w-full rounded-xl border border-[#e4d3d8] px-4 py-3 outline-none focus:border-[#75152F]"/></div>}
+      {mode==="signup"&&<><div><label htmlFor="customer-whatsapp" className="mb-1 block text-sm font-semibold">WhatsApp <span className="font-normal text-[#817177]">(opcional)</span></label><input id="customer-whatsapp" type="tel" inputMode="tel" autoComplete="tel" maxLength={16} placeholder="(71) 99999-9999" value={whatsapp} onChange={e=>{const digits=e.target.value.replace(/\\D/g,"").slice(0,11);setWhatsapp(digits.length>6?`(${digits.slice(0,2)}) ${digits.slice(2,digits.length===11?7:6)}-${digits.slice(digits.length===11?7:6)}`:digits.length>2?`(${digits.slice(0,2)}) ${digits.slice(2)}`:digits)}} className="w-full rounded-xl border border-[#e4d3d8] px-4 py-3 outline-none focus:border-[#75152F]"/></div><div><label htmlFor="customer-birthday" className="mb-1 block text-sm font-semibold">Data de aniversário <span className="font-normal text-[#817177]">(opcional)</span></label><input id="customer-birthday" type="date" max={new Date().toISOString().slice(0,10)} value={birthday} onChange={e=>setBirthday(e.target.value)} className="w-full rounded-xl border border-[#e4d3d8] bg-white px-4 py-3 outline-none focus:border-[#75152F]"/></div></>}
       <div><label htmlFor="customer-email" className="mb-1 block text-sm font-semibold">E-mail</label><input id="customer-email" type="email" required maxLength={255} value={email} onChange={e=>setEmail(e.target.value)} autoComplete="email" className="w-full rounded-xl border border-[#e4d3d8] px-4 py-3 outline-none focus:border-[#75152F]"/></div>
       {mode!=="forgot"&&<div><label htmlFor="customer-password" className="mb-1 block text-sm font-semibold">Senha</label><div className="relative"><input id="customer-password" type={showPassword?"text":"password"} required minLength={8} maxLength={256} value={password} onChange={e=>setPassword(e.target.value)} autoComplete={mode==="signup"?"new-password":"current-password"} className="w-full rounded-xl border border-[#e4d3d8] px-4 py-3 pr-12 outline-none focus:border-[#75152F]"/><button type="button" onClick={()=>setShowPassword(!showPassword)} className="absolute right-3 top-3 text-[#75152F]" aria-label={showPassword?"Ocultar senha":"Mostrar senha"}>{showPassword?<EyeOff size={20}/>:<Eye size={20}/>}</button></div></div>}
       {mode==="signup"&&<div><label htmlFor="customer-confirm" className="mb-1 block text-sm font-semibold">Confirmar senha</label><input id="customer-confirm" type="password" required minLength={8} maxLength={256} value={confirm} onChange={e=>setConfirm(e.target.value)} autoComplete="new-password" className="w-full rounded-xl border border-[#e4d3d8] px-4 py-3 outline-none focus:border-[#75152F]"/></div>}
