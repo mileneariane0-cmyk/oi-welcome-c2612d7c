@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getAdminOverview } from "@/lib/admin.functions";
 import { isAdministrator } from "@/lib/admin-access";
 import { BrandLogo } from "@/components/brand-logo";
+import { AdminProducts } from "@/components/admin-products";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ArrowLeft, BarChart3, Bell, CalendarDays, ChevronRight, ClipboardList, CreditCard, Gift, Image, LayoutDashboard, LockKeyhole, Menu, Package, Palette, Settings, ShoppingBag, Tag, Users, Wallet, X } from "lucide-react";
