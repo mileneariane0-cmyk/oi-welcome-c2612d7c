@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as ProdutosRouteImport } from './routes/produtos'
+import { Route as RecuperarContaRouteImport } from './routes/recuperar-conta'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdministradorRouteImport } from './routes/_authenticated/administrador'
 
@@ -30,9 +32,19 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MinhaContaRoute = MinhaContaRouteImport.update({
+  id: '/minha-conta',
+  path: '/minha-conta',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProdutosRoute = ProdutosRouteImport.update({
   id: '/produtos',
   path: '/produtos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecuperarContaRoute = RecuperarContaRouteImport.update({
+  id: '/recuperar-conta',
+  path: '/recuperar-conta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -50,14 +62,18 @@ const AuthenticatedAdministradorRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/produtos': typeof ProdutosRoute
+  '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/administrador': typeof AuthenticatedAdministradorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/produtos': typeof ProdutosRoute
+  '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/administrador': typeof AuthenticatedAdministradorRoute
 }
@@ -66,21 +82,39 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/produtos': typeof ProdutosRoute
+  '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/administrador': typeof AuthenticatedAdministradorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/produtos' | '/reset-password' | '/administrador'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/minha-conta'
+    | '/produtos'
+    | '/recuperar-conta'
+    | '/reset-password'
+    | '/administrador'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/produtos' | '/reset-password' | '/administrador'
+  to:
+    | '/'
+    | '/auth'
+    | '/minha-conta'
+    | '/produtos'
+    | '/recuperar-conta'
+    | '/reset-password'
+    | '/administrador'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/minha-conta'
     | '/produtos'
+    | '/recuperar-conta'
     | '/reset-password'
     | '/_authenticated/administrador'
   fileRoutesById: FileRoutesById
@@ -89,7 +123,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  MinhaContaRoute: typeof MinhaContaRoute
   ProdutosRoute: typeof ProdutosRoute
+  RecuperarContaRoute: typeof RecuperarContaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
@@ -116,11 +152,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/minha-conta': {
+      id: '/minha-conta'
+      path: '/minha-conta'
+      fullPath: '/minha-conta'
+      preLoaderRoute: typeof MinhaContaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/produtos': {
       id: '/produtos'
       path: '/produtos'
       fullPath: '/produtos'
       preLoaderRoute: typeof ProdutosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperar-conta': {
+      id: '/recuperar-conta'
+      path: '/recuperar-conta'
+      fullPath: '/recuperar-conta'
+      preLoaderRoute: typeof RecuperarContaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -155,7 +205,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  MinhaContaRoute: MinhaContaRoute,
   ProdutosRoute: ProdutosRoute,
+  RecuperarContaRoute: RecuperarContaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
