@@ -1,4 +1,6 @@
 # Etapa 2
+- [ ] Corrigir somente o e-mail administrativo e a permissão da conta confirmada existente; verificar has_role e exclusividade administrativa.
+- [ ] Conferir os fluxos existentes de detalhes, inclusão e pop-up da sacola e localização dos termos; alterar somente se necessário.
 - [x] Aplicar a logomarca original preservando o site.
 - [x] Criar perfis, permissões e estrutura inicial sem dados fictícios.
 - [x] Preparar arquivos públicos e privados com limites e controles.

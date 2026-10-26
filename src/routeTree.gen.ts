@@ -16,7 +16,9 @@ import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as ProdutosRouteImport } from './routes/produtos'
 import { Route as RecuperarContaRouteImport } from './routes/recuperar-conta'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SacolaRouteImport } from './routes/sacola'
 import { Route as AuthenticatedAdministradorRouteImport } from './routes/_authenticated/administrador'
+import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,12 +54,22 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SacolaRoute = SacolaRouteImport.update({
+  id: '/sacola',
+  path: '/sacola',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdministradorRoute =
   AuthenticatedAdministradorRouteImport.update({
     id: '/administrador',
     path: '/administrador',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ProdutoIdRoute = ProdutoIdRouteImport.update({
+  id: '/produto/$id',
+  path: '/produto/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,7 +78,9 @@ export interface FileRoutesByFullPath {
   '/produtos': typeof ProdutosRoute
   '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sacola': typeof SacolaRoute
   '/administrador': typeof AuthenticatedAdministradorRoute
+  '/produto/$id': typeof ProdutoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,7 +89,9 @@ export interface FileRoutesByTo {
   '/produtos': typeof ProdutosRoute
   '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sacola': typeof SacolaRoute
   '/administrador': typeof AuthenticatedAdministradorRoute
+  '/produto/$id': typeof ProdutoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,7 +102,9 @@ export interface FileRoutesById {
   '/produtos': typeof ProdutosRoute
   '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sacola': typeof SacolaRoute
   '/_authenticated/administrador': typeof AuthenticatedAdministradorRoute
+  '/produto/$id': typeof ProdutoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,7 +115,9 @@ export interface FileRouteTypes {
     | '/produtos'
     | '/recuperar-conta'
     | '/reset-password'
+    | '/sacola'
     | '/administrador'
+    | '/produto/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,7 +126,9 @@ export interface FileRouteTypes {
     | '/produtos'
     | '/recuperar-conta'
     | '/reset-password'
+    | '/sacola'
     | '/administrador'
+    | '/produto/$id'
   id:
     | '__root__'
     | '/'
@@ -116,7 +138,9 @@ export interface FileRouteTypes {
     | '/produtos'
     | '/recuperar-conta'
     | '/reset-password'
+    | '/sacola'
     | '/_authenticated/administrador'
+    | '/produto/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -127,6 +151,8 @@ export interface RootRouteChildren {
   ProdutosRoute: typeof ProdutosRoute
   RecuperarContaRoute: typeof RecuperarContaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SacolaRoute: typeof SacolaRoute
+  ProdutoIdRoute: typeof ProdutoIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -180,12 +206,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sacola': {
+      id: '/sacola'
+      path: '/sacola'
+      fullPath: '/sacola'
+      preLoaderRoute: typeof SacolaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/administrador': {
       id: '/_authenticated/administrador'
       path: '/administrador'
       fullPath: '/administrador'
       preLoaderRoute: typeof AuthenticatedAdministradorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/produto/$id': {
+      id: '/produto/$id'
+      path: '/produto/$id'
+      fullPath: '/produto/$id'
+      preLoaderRoute: typeof ProdutoIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -209,6 +249,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProdutosRoute: ProdutosRoute,
   RecuperarContaRoute: RecuperarContaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SacolaRoute: SacolaRoute,
+  ProdutoIdRoute: ProdutoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
