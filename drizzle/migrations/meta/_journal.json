@@ -29,6 +29,20 @@
       "when": 1792981724196,
       "tag": "0003_correct_authorized_admin_mailbox",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792984074054,
+      "tag": "0004_customer_birthday",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792984104320,
+      "tag": "0005_storefront_catalog_access",
+      "breakpoints": true
     }
   ]
 }

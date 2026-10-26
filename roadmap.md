@@ -1,4 +1,8 @@
 # Etapa 2
+- [ ] Atualização geral: corrigir clientes e validar aniversários (prioridades 1 e 2).
+- [ ] Integrar catálogo persistido, oito produtos editáveis, categorias, mídias e variações (prioridade 3).
+- [ ] Validar páginas individuais e sacola com produtos persistidos.
+- [ ] Gerenciamento de pedidos e banners; convites individuais continuam posteriores.
 - [x] Corrigir somente o e-mail administrativo e a permissão da conta confirmada existente; verificar has_role e exclusividade administrativa.
 - [x] Conferir os fluxos existentes de detalhes, inclusão e pop-up da sacola e localização dos termos; funcionalidades preservadas e verificadas com a conta existente.
 - [x] Aplicar a logomarca original preservando o site.
