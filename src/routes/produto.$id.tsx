@@ -4,7 +4,14 @@ import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/produto/$id")({ component: ProductDetail });
+export const Route = createFileRoute("/produto/$id")({ component: ProductDetail, head: ({ params }) => ({ meta: [
+ { title: `Produto ${params.id} | Personalizê` },
+ { name: "description", content: "Confira os detalhes do produto personalizado da Personalizê." },
+ { property: "og:title", content: `Produto ${params.id} | Personalizê` },
+ { property: "og:description", content: "Confira os detalhes do produto personalizado da Personalizê." },
+ { property: "og:type", content: "website" },
+ { name: "twitter:card", content: "summary" },
+] }) });
 type Product = { id:string; name:string; description:string; price:number; product_type:string; category_id:string|null; published:boolean };
 const samples = [
  ["Convite digital interativo floral","Convites digitais",49.9,"💌"],
