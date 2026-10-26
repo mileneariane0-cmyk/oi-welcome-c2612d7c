@@ -4,7 +4,14 @@ import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/sacola")({component: Bag, ssr:false});
+export const Route = createFileRoute("/sacola")({component: Bag, ssr:false, head: () => ({ meta: [
+ { title: "Minha sacola | Personalizê" },
+ { name: "description", content: "Confira os produtos e o resumo da sua sacola na Personalizê." },
+ { property: "og:title", content: "Minha sacola | Personalizê" },
+ { property: "og:description", content: "Confira os produtos e o resumo da sua sacola na Personalizê." },
+ { property: "og:type", content: "website" },
+ { name: "twitter:card", content: "summary" },
+] }) });
 const products=[
  {id:1,name:"Convite digital interativo floral",price:49.9,emoji:"💌"},
  {id:2,name:"Kit festa personalizado",price:89.9,emoji:"🎉"},
