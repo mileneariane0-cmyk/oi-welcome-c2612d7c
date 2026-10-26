@@ -4,8 +4,9 @@ import { readFileSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const db = new PGlite();
-const authorized = 'arianeararagaocomercial@gmail.com';
+const authorized = 'arianearagaocomercial@gmail.com';
 const migration = readFileSync('drizzle/migrations/0002_authorized_admin_email.sql', 'utf8');
+const correction = readFileSync('drizzle/migrations/0003_correct_authorized_admin_mailbox.sql', 'utf8');
 
 describe('Database administrator email authorization', () => {
   beforeAll(async () => {
@@ -15,6 +16,7 @@ describe('Database administrator email authorization', () => {
       CREATE TYPE public.app_role AS ENUM ('admin', 'user');
       CREATE TABLE public.user_roles (user_id uuid, role public.app_role, UNIQUE(user_id, role));`);
     await db.exec(migration);
+    await db.exec(correction);
   }, 30000);
   afterAll(() => db.close());
 
@@ -31,6 +33,11 @@ describe('Database administrator email authorization', () => {
   it('blocks a confirmed different mailbox', async () => {
     await db.query('INSERT INTO auth.users VALUES ($1, $2, now())', ['00000000-0000-0000-0000-000000000002', 'ordinary@example.test']);
     const result = await db.query('SELECT * FROM public.user_roles WHERE user_id = $1', ['00000000-0000-0000-0000-000000000002']);
+    expect(result.rows).toHaveLength(0);
+  });
+  it('blocks the previously misspelled authorized mailbox even when confirmed', async () => {
+    await db.query('INSERT INTO auth.users VALUES ($1, $2, now())', ['00000000-0000-0000-0000-000000000003', 'arianeararagaocomercial@gmail.com']);
+    const result = await db.query('SELECT * FROM public.user_roles WHERE user_id = $1', ['00000000-0000-0000-0000-000000000003']);
     expect(result.rows).toHaveLength(0);
   });
   it('revokes administrator when the authorized mailbox changes', async () => {
