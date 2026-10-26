@@ -1,6 +1,6 @@
 # Etapa 2
-- [ ] Corrigir somente o e-mail administrativo e a permissão da conta confirmada existente; verificar has_role e exclusividade administrativa.
-- [ ] Conferir os fluxos existentes de detalhes, inclusão e pop-up da sacola e localização dos termos; alterar somente se necessário.
+- [x] Corrigir somente o e-mail administrativo e a permissão da conta confirmada existente; verificar has_role e exclusividade administrativa.
+- [x] Conferir os fluxos existentes de detalhes, inclusão e pop-up da sacola e localização dos termos; funcionalidades preservadas e verificadas com a conta existente.
 - [x] Aplicar a logomarca original preservando o site.
 - [x] Criar perfis, permissões e estrutura inicial sem dados fictícios.
 - [x] Preparar arquivos públicos e privados com limites e controles.
@@ -9,5 +9,6 @@
 - [x] Verificar e aplicar a autorização administrativa para o e-mail confirmado indicado no documento.
 - [x] Preparar recebimento de convite seguro para definição da senha sem expor o e-mail autorizado.
 - [x] Verificar bloqueio de visitantes, ausência de cadastro administrativo e regras para e-mails não autorizados em banco isolado.
-- [ ] Enviar convite e verificar confirmação, definição de senha, entrada/saída da conta autorizada e entrega da recuperação — depende de Mais → Usuários → Adicionar usuário → Enviar convite e da aceitação pela usuária.
+- [x] Confirmar conta existente e acesso ao painel com sessão autenticada; has_role retornou true. A usuária já confirmou o e-mail e definiu a senha.
+- [ ] Verificar entrada com senha e entrega da recuperação — depende de teste da usuária com sua senha e link recebido por e-mail; fora da correção pontual.
 - [ ] Desativar cadastro geral — depende da configuração em Mais → Usuários → Configurações de autenticação; não foi possível ler todos os parâmetros exigidos para alterar com segurança.
