@@ -1,4 +1,8 @@
 # Etapa 2
+- [ ] Pedido completo de 27/10: conferir histórico real e organizar arquivos de migração sem reaplicar alterações.
+- [ ] Finalizar convites publicados com mídia privada protegida e RSVP validado/limitado no servidor.
+- [ ] Completar carrossel de banners, múltiplas categorias e preservação da seleção ao entrar na conta.
+- [ ] Validar fluxos disponíveis sem registros fictícios; registrar testes reais bloqueados e relatório por categoria.
 - [x] Corrigir campo opcional de nascimento; consulta e gravação do cliente existente verificadas; criação e edição de nascimento testadas em banco isolado sem clientes fictícios hospedados.
 - [x] Integrar aniversários administrativos; fuso Bahia e datas opcionais testados, sino vazio verificado; mensagem manual de aniversariante real aguarda registro correspondente.
 - [x] Integrar catálogo persistido com oito produtos editáveis mais produto existente, categorias, mídia e variações; gravação sem alterar conteúdo verificada.
