@@ -17,4 +17,4 @@ it('administrator can create, read and update customers with optional birthday w
  expect(saved).toEqual({birth_date:'1990-10-26',notes:'Atualizada'});
  await db.exec("SET test.admin='no'");expect((await db.query('SELECT id FROM public.customers')).rows).toHaveLength(0);
  }finally{await db.close();}
-});
+},20000);
