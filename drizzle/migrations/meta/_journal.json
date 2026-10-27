@@ -57,6 +57,13 @@
       "when": 1793111352133,
       "tag": "0007_secure_invitation_rsvp",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793111448937,
+      "tag": "0008_product_category_relationships",
+      "breakpoints": true
     }
   ]
 }
