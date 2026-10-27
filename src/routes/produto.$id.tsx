@@ -5,7 +5,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import {catalogQuery} from "@/lib/catalog.functions";
 import {variantGroups,selectedPrice} from "@/lib/catalog";
-import {readBag,writeBag,addBagEntry} from "@/lib/bag";
+import {readBag,writeBag,addBagEntry,savePendingSelection,pendingSelection} from "@/lib/bag";
 import {ProductMedia} from "@/components/product-media";
 import {Button} from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,13 +26,13 @@ function ProductDetail(){
  const [addedPrompt,setAddedPrompt]=useState(false),[loginPrompt,setLoginPrompt]=useState(false);
  const [selected,setSelected]=useState<Record<string,string>>({});
  const [quantity,setQuantity]=useState(1),[personalization,setPersonalization]=useState(""),[mediaIndex,setMediaIndex]=useState(0),[message,setMessage]=useState("");
- useEffect(()=>{setSelected({});setQuantity(1);setPersonalization("");setMediaIndex(0);},[id]);
+ useEffect(()=>{const pending=pendingSelection(product?.id??id);setSelected(pending?.selected??{});setQuantity(pending?.quantity??1);setPersonalization(pending?.personalization??"");setMediaIndex(0);},[id,product?.id]);
  const groups=variantGroups(product?.variants??[]);
  const finalPrice=selectedPrice(product?.price??0,product?.variants??[],selected);
  const related=catalog.products.filter(p=>p.id!==product?.id).sort((a,b)=>Number(b.category_id===product?.category_id)-Number(a.category_id===product?.category_id)).slice(0,4);
  async function buy(){
   setMessage("");if(!product)return;
-  const {data,error}=await supabase.auth.getUser();if(error||!data.user){setLoginPrompt(true);return;}
+  const {data,error}=await supabase.auth.getUser();if(error||!data.user){savePendingSelection(product.id,quantity,selected,personalization);sessionStorage.setItem('personalize-shopping-return',`/produto/${product.id}`);setLoginPrompt(true);return;}
   if(groups.some(g=>g.required&&!selected[g.name])){setMessage("Selecione uma opção de cada grupo obrigatório.");return;}
   try{writeBag(data.user.id,addBagEntry(readBag(data.user.id),product.id,quantity,selected,personalization));setAddedPrompt(true);}catch{setMessage("Não foi possível atualizar a sacola neste dispositivo.");}
  }
