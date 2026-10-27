@@ -43,6 +43,13 @@
       "when": 1792984104320,
       "tag": "0005_storefront_catalog_access",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793110666950,
+      "tag": "0006_published_banner_read",
+      "breakpoints": true
     }
   ]
 }

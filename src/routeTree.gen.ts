@@ -18,6 +18,7 @@ import { Route as RecuperarContaRouteImport } from './routes/recuperar-conta'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SacolaRouteImport } from './routes/sacola'
 import { Route as AuthenticatedAdministradorRouteImport } from './routes/_authenticated/administrador'
+import { Route as ConviteSlugRouteImport } from './routes/convite.$slug'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +66,11 @@ const AuthenticatedAdministradorRoute =
     path: '/administrador',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ConviteSlugRoute = ConviteSlugRouteImport.update({
+  id: '/convite/$slug',
+  path: '/convite/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProdutoIdRoute = ProdutoIdRouteImport.update({
   id: '/produto/$id',
   path: '/produto/$id',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/sacola': typeof SacolaRoute
   '/administrador': typeof AuthenticatedAdministradorRoute
+  '/convite/$slug': typeof ConviteSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
 }
 export interface FileRoutesByTo {
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sacola': typeof SacolaRoute
   '/administrador': typeof AuthenticatedAdministradorRoute
+  '/convite/$slug': typeof ConviteSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
 }
 export interface FileRoutesById {
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/sacola': typeof SacolaRoute
   '/_authenticated/administrador': typeof AuthenticatedAdministradorRoute
+  '/convite/$slug': typeof ConviteSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
 }
 export interface FileRouteTypes {
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sacola'
     | '/administrador'
+    | '/convite/$slug'
     | '/produto/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sacola'
     | '/administrador'
+    | '/convite/$slug'
     | '/produto/$id'
   id:
     | '__root__'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sacola'
     | '/_authenticated/administrador'
+    | '/convite/$slug'
     | '/produto/$id'
   fileRoutesById: FileRoutesById
 }
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   RecuperarContaRoute: typeof RecuperarContaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SacolaRoute: typeof SacolaRoute
+  ConviteSlugRoute: typeof ConviteSlugRoute
   ProdutoIdRoute: typeof ProdutoIdRoute
 }
 
@@ -220,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdministradorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/convite/$slug': {
+      id: '/convite/$slug'
+      path: '/convite/$slug'
+      fullPath: '/convite/$slug'
+      preLoaderRoute: typeof ConviteSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/produto/$id': {
       id: '/produto/$id'
       path: '/produto/$id'
@@ -250,6 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecuperarContaRoute: RecuperarContaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SacolaRoute: SacolaRoute,
+  ConviteSlugRoute: ConviteSlugRoute,
   ProdutoIdRoute: ProdutoIdRoute,
 }
 export const routeTree = rootRouteImport
