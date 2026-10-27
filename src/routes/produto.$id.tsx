@@ -10,14 +10,14 @@ import {ProductMedia} from "@/components/product-media";
 import {Button} from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/produto/$id")({ loader:({context})=>context.queryClient.ensureQueryData(catalogQuery), component: ProductDetail, head: ({ params }) => ({ meta: [
- { title: `Produto ${params.id} | Personalizê` },
+export const Route = createFileRoute("/produto/$id")({ loader:({context})=>context.queryClient.ensureQueryData(catalogQuery), component: ProductDetail, head: ({ params, loaderData }) => { const product=loaderData?.products.find(p=>p.id===params.id||p.slug===params.id); const title=product?`${product.name} | Personalizê`:"Produto indisponível | Personalizê"; return { meta: [
+ { title: title },
  { name: "description", content: "Confira os detalhes do produto personalizado da Personalizê." },
- { property: "og:title", content: `Produto ${params.id} | Personalizê` },
+ { property: "og:title", content: title },
  { property: "og:description", content: "Confira os detalhes do produto personalizado da Personalizê." },
  { property: "og:type", content: "website" },
  { name: "twitter:card", content: "summary" },
-] }) });
+] }; } });
 const money=(n:number)=>n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 function ProductDetail(){
  const {id}=Route.useParams();
@@ -51,7 +51,7 @@ function ProductDetail(){
  {message&&<p role="status" className="mt-3 text-sm text-[#75152F]">{message}</p>}</section></div>
  <section className="mt-14"><h2 className="font-serif text-3xl text-[#75152F]">Você também pode gostar</h2><p className="mt-2 text-sm text-[#77676d]">Conheça outras opções da Personalizê.</p><div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">{related.map(item=><Link key={item.id} to="/produto/$id" params={{id:item.id}} className="flex flex-col overflow-hidden rounded-2xl border border-[#eadde0] bg-white"><div className="flex aspect-square items-center justify-center bg-[#f7e9ec] text-6xl"><ProductMedia media={item.media[0]} name={item.name}/></div><div className="flex flex-1 flex-col p-4"><p className="text-xs text-[#819B87]">{item.category}</p><h3 className="mt-2 text-sm font-semibold">{item.name}</h3><p className="mt-auto pt-4 font-bold text-[#75152F]">{money(item.price)}</p><span className="mt-3 text-xs font-bold text-[#75152F]">Ver detalhes</span></div></Link>)}</div></section></>}
  </main>
- {addedPrompt&&<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"><section role="dialog" aria-modal="true" aria-labelledby="added-title" className="w-full max-w-sm rounded-3xl bg-white p-7 text-center shadow-xl"><h2 id="added-title" className="font-serif text-2xl text-[#75152F]">Produto adicionado à sacola!</h2><p className="mt-3 text-sm text-[#77676d]">Deseja continuar comprando ou ir para a sacola?</p><div className="mt-6 flex flex-col gap-3"><Button onClick={()=>setAddedPrompt(false)} className="rounded-xl border border-[#75152F] px-4 py-3 font-bold text-[#75152F]">Continuar comprando</Button><a href="/sacola" className="rounded-xl bg-[#75152F] px-4 py-3 font-bold text-white">Ir para a sacola</a></div></section></div>}
- {loginPrompt&&<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"><section role="dialog" aria-modal="true" aria-label="Entre na sua conta" className="w-full max-w-sm rounded-3xl bg-white p-7 text-center"><h2 className="font-serif text-2xl text-[#75152F]">Entre na sua conta</h2><p className="mt-3 text-sm">Para continuar, entre ou cadastre-se na Personalizê.</p><div className="mt-6 flex gap-3"><Button onClick={()=>setLoginPrompt(false)} className="flex-1 rounded-xl border p-3">Agora não</Button><Link to="/minha-conta" className="flex-1 rounded-xl bg-[#75152F] p-3 font-bold text-white">Sim, continuar</Link></div></section></div>}
+ {addedPrompt&&<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"><section role="dialog" aria-modal="true" aria-labelledby="added-title" className="w-full max-w-sm rounded-3xl bg-white p-7 text-center shadow-xl"><h2 id="added-title" className="font-serif text-2xl text-[#75152F]">Produto adicionado à sacola!</h2><p className="mt-3 text-sm text-[#77676d]">Deseja continuar comprando ou ir para a sacola?</p><div className="mt-6 flex flex-col gap-3"><Button variant="outline" onClick={()=>setAddedPrompt(false)} className="rounded-xl border border-[#75152F] px-4 py-3 font-bold text-[#75152F]">Continuar comprando</Button><a href="/sacola" className="rounded-xl bg-[#75152F] px-4 py-3 font-bold text-white">Ir para a sacola</a></div></section></div>}
+ {loginPrompt&&<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"><section role="dialog" aria-modal="true" aria-label="Entre na sua conta" className="w-full max-w-sm rounded-3xl bg-white p-7 text-center"><h2 className="font-serif text-2xl text-[#75152F]">Entre na sua conta</h2><p className="mt-3 text-sm">Para continuar, entre ou cadastre-se na Personalizê.</p><div className="mt-6 flex gap-3"><Button variant="outline" onClick={()=>setLoginPrompt(false)} className="flex-1 rounded-xl border p-3">Agora não</Button><Link to="/minha-conta" className="flex-1 rounded-xl bg-[#75152F] p-3 font-bold text-white">Sim, continuar</Link></div></section></div>}
  </div>;
 }
