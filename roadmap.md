@@ -1,8 +1,12 @@
 # Etapa 2
-- [ ] Atualização geral: corrigir clientes e validar aniversários (prioridades 1 e 2).
-- [ ] Integrar catálogo persistido, oito produtos editáveis, categorias, mídias e variações (prioridade 3).
-- [ ] Validar páginas individuais e sacola com produtos persistidos.
-- [ ] Gerenciamento de pedidos e banners; convites individuais continuam posteriores.
+- [x] Corrigir campo opcional de nascimento; consulta e gravação do cliente existente verificadas; criação e edição de nascimento testadas em banco isolado sem clientes fictícios hospedados.
+- [x] Integrar aniversários administrativos; fuso Bahia e datas opcionais testados, sino vazio verificado; mensagem manual de aniversariante real aguarda registro correspondente.
+- [x] Integrar catálogo persistido com oito produtos editáveis mais produto existente, categorias, mídia e variações; gravação sem alterar conteúdo verificada.
+- [x] Verificar página individual, inclusão autenticada, pop-up, personalização, quantidades e exclusão da sacola.
+- [x] Reutilizar ferramentas sincronizadas de pedidos e banners; leitura administrativa e banners publicados conectados, sem pedidos fictícios nem pagamentos ativados.
+- [ ] Validar upload e exibição com fotos/vídeos reais de produtos e banners — não há mídias cadastradas; arquivos comerciais não fornecidos.
+- [ ] Histórico de mudanças de pedidos e confirmação de pagamento real — não há pedidos; checkout não ativado nesta atualização pontual.
+- [ ] Convites individuais públicos — etapa posterior solicitada; arquivos sincronizados preservados, sem ampliar acesso a dados privados.
 - [x] Corrigir somente o e-mail administrativo e a permissão da conta confirmada existente; verificar has_role e exclusividade administrativa.
 - [x] Conferir os fluxos existentes de detalhes, inclusão e pop-up da sacola e localização dos termos; funcionalidades preservadas e verificadas com a conta existente.
 - [x] Aplicar a logomarca original preservando o site.
