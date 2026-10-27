@@ -1,6 +1,6 @@
 export type CatalogVariant = {id:string;name:string;price:number|null;attributes:import("@/integrations/supabase/types").Json};
 export type CatalogMedia = {id:string;storage_path:string;media_type:string;position:number};
-export type CatalogProduct = {id:string;slug:string;name:string;description:string;price:number;promotional_price:number|null;personalization_instructions:string;category_id:string|null;category:string;categories:string[];product_type:string;media:CatalogMedia[];variants:CatalogVariant[];old?:number;emoji:string;gradient:string;badge?:string};
+export type CatalogProduct = {id:string;slug:string;name:string;description:string;price:number;promotional_price:number|null;personalization_instructions:string;preview_url:string|null;category_id:string|null;category:string;categories:string[];product_type:string;media:CatalogMedia[];variants:CatalogVariant[];old?:number;emoji:string;gradient:string;badge?:string};
 export function catalogAppearance(slug:string,type:string){
  const styles:Record<string,{emoji:string;gradient:string}>={
  'convite-digital-interativo-floral':{emoji:'💌',gradient:'catalog-floral'},
