@@ -16,7 +16,7 @@ function Products() {
   const items=catalog.products;
   const categories=["Todos",...catalog.categories.map(c=>c.name)];
   const [query,setQuery] = useState("");
-  const [category,setCategory] = useState("Todos");
+  const [category,setCategory] = useState(()=>{if(typeof window==="undefined")return "Todos";const slug=new URLSearchParams(window.location.search).get("categoria");return catalog.categories.find(c=>c.slug===slug)?.name??"Todos";});
   const [sort,setSort] = useState("default");
   const [cart,setCart] = useState<Record<string,number>>({});
   const [loginPromptOpen,setLoginPromptOpen] = useState(false);
