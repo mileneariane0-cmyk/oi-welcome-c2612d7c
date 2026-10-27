@@ -303,6 +303,24 @@ export type Database = {
           },
         ]
       }
+      invitation_request_limits: {
+        Row: {
+          request_key: string
+          requests: number
+          window_start: string
+        }
+        Insert: {
+          request_key: string
+          requests?: number
+          window_start?: string
+        }
+        Update: {
+          request_key?: string
+          requests?: number
+          window_start?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -804,6 +822,16 @@ export type Database = {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
+        }
+        Returns: boolean
+      }
+      submit_invitation_rsvp: {
+        Args: {
+          p_attendance: string
+          p_name: string
+          p_party_size: number
+          p_request_key: string
+          p_slug: string
         }
         Returns: boolean
       }
