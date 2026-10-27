@@ -19,7 +19,7 @@ export const getPublicInvitation=createServerFn({method:'GET'}).inputValidator((
 export function invitationQuery(slug:string){return queryOptions({queryKey:['public-invitation',slug],queryFn:()=>getPublicInvitation({data:{slug}}),staleTime:0,gcTime:0,refetchInterval:240000});}
 export const submitPublicRsvp=createServerFn({method:'POST'}).inputValidator(input=>rsvpInput.parse(input)).handler(async({data})=>{
  setResponseHeader('Cache-Control','no-store');
- const ip=getRequestHeader('cf-connecting-ip')??getRequestHeader('x-forwarded-for')?.split(',')[0]?.trim()??'unknown';
+ const ip=getRequestHeader('cf-connecting-ip')??'unknown';
  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`${data.slug}:${ip}`));const key=Array.from(new Uint8Array(digest),v=>v.toString(16).padStart(2,'0')).join('');
  const {supabaseAdmin}=await import('@/integrations/supabase/client.server');
  const {data:allowed,error}=await supabaseAdmin.rpc('submit_invitation_rsvp',{p_slug:data.slug,p_name:data.name,p_attendance:data.attendance,p_party_size:data.partySize,p_request_key:key});
