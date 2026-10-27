@@ -18,3 +18,6 @@
 - Keep future platform tables admin-only until their public/customer workflows are implemented with narrow access policies.
 - Published catalog reads use a shared public server function and narrow publication-scoped policies, while product/category/media mutations remain protected by administrator RLS.
 - Product variants store group and required metadata in attributes; bag entries retain selected option IDs and personalizations per user, and prices never represent payment confirmation.
+- Invitation tables and the invitation bucket stay private; a public server function projects only published event fields and signs associated media for short-lived access. RSVP writes use a service-only database function with validation and an atomic persistent request window, never direct public inserts.
+- Applied migration files and journal remain byte-exact; unjournaled duplicate or unsafe reference SQL stays outside the migration execution directory.
+- Additional product categories use an additive join table backfilled from the existing primary category, preserving that column for compatibility.

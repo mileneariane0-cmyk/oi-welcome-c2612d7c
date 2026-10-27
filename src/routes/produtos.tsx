@@ -26,7 +26,7 @@ function Products() {
     setCart(current=>({...current,[id]:(current[id]||0)+1}));
   }
   const filtered = useMemo(()=>{
-    const result=items.filter(item=>(category==="Todos"||item.category===category)&&(item.name+" "+item.category).toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR")));
+    const result=items.filter(item=>(category==="Todos"||item.categories.includes(category))&&(item.name+" "+item.category).toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR")));
     if(sort==="low")result.sort((a,b)=>a.price-b.price);
     if(sort==="high")result.sort((a,b)=>b.price-a.price);
     return result;

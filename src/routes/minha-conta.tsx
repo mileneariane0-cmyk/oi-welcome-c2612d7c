@@ -33,6 +33,7 @@ function CustomerAccount() {
     const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{if(mounted){syncUser(session?.user);}});
     return ()=>{mounted=false;subscription.unsubscribe();};
   },[]);
+  useEffect(()=>{if(!userId)return;const path=sessionStorage.getItem('personalize-shopping-return');if(path&&/^\/produto\/[a-z0-9-]+$/.test(path)){sessionStorage.removeItem('personalize-shopping-return');window.location.assign(path);}},[userId]);
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setMessage("");
     if(!email.trim()||!email.includes("@")){setMessage("Informe um e-mail válido.");return;}

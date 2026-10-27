@@ -1,0 +1,3 @@
+CREATE FUNCTION public.require_verified_order_payment() RETURNS trigger LANGUAGE plpgsql SET search_path=public AS $$ BEGIN IF NEW.status='paid' AND (TG_OP='INSERT' OR OLD.status IS DISTINCT FROM NEW.status) AND NOT EXISTS(SELECT 1 FROM public.payments WHERE order_id=NEW.id AND status='confirmed' AND paid_at IS NOT NULL) THEN RAISE EXCEPTION 'Payment has not been confirmed'; END IF; RETURN NEW; END $$;
+REVOKE ALL ON FUNCTION public.require_verified_order_payment() FROM PUBLIC,anon,authenticated;
+CREATE TRIGGER require_verified_order_payment BEFORE INSERT OR UPDATE OF status ON public.orders FOR EACH ROW EXECUTE FUNCTION public.require_verified_order_payment();

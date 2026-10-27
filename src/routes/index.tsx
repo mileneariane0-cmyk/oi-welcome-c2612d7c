@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import {catalogQuery} from "@/lib/catalog.functions";
+import {StoreBannerCarousel} from "@/components/store-banner-carousel";
 import {ProductMedia} from "@/components/product-media";
 import { BrandLogo } from "@/components/brand-logo";
 import { useEffect, useMemo, useState } from "react";
@@ -38,7 +39,7 @@ function Home() {
     });
   };
   const [favorites,setFavorites] = useState<string[]>([]);
-  const filtered = useMemo(()=>items.filter(item => (category === "Todos" || item.category === category) && (item.name+" "+item.category).toLowerCase().includes(query.toLowerCase())),[category,query]);
+  const filtered = useMemo(()=>items.filter(item => (category === "Todos" || item.categories.includes(category)) && (item.name+" "+item.category).toLowerCase().includes(query.toLowerCase())),[category,query]);
 
   const count = Object.values(cart).reduce((sum,n)=>sum+n,0);
   const total = items.reduce((sum,item)=>sum+item.price*(cart[item.id] || 0),0);
@@ -63,7 +64,7 @@ function Home() {
         {/* Área publicitária: futuramente administrada em Administrador > Banners.
             Aceitará imagem ou vídeo, link de destino, ordem e status de publicação.
             Até a integração com o banco de dados, exibe somente uma peça demonstrativa. */}
-        {catalog.banners.length>0?<div className="space-y-4">{catalog.banners.map(b=>{const url=supabase.storage.from("banners-public").getPublicUrl(b.storage_path).data.publicUrl;const href=b.destination_url&&(/^(https?:\/\/|\/(?!\/))/.test(b.destination_url))?b.destination_url:"/produtos";return <a key={b.id} href={href} aria-label={b.title} className="block overflow-hidden rounded-lg">{b.media_type==="video"?<video src={url} muted autoPlay loop playsInline className="aspect-[16/9] w-full object-cover"/>:<img src={url} alt={b.title} className="aspect-[16/9] w-full object-cover"/>}</a>;})}</div>:<div aria-label="Banner promocional demonstrativo" className="relative flex min-h-[310px] flex-col justify-center overflow-hidden rounded-[28px] bg-gradient-to-r from-[#75152F] via-[#8e3450] to-[#ba7085] px-7 py-10 text-white sm:min-h-[370px] sm:px-12">
+        {catalog.banners.length>0?<StoreBannerCarousel banners={catalog.banners}/>:<div aria-label="Banner promocional demonstrativo" className="relative flex min-h-[310px] flex-col justify-center overflow-hidden rounded-[28px] bg-gradient-to-r from-[#75152F] via-[#8e3450] to-[#ba7085] px-7 py-10 text-white sm:min-h-[370px] sm:px-12">
           <div className="pointer-events-none absolute -right-12 -top-14 h-72 w-72 rounded-full border-[35px] border-white/10"/><div className="pointer-events-none absolute bottom-[-90px] right-10 h-56 w-56 rounded-full bg-[#f2aabb]/25 blur-2xl"/>
           <div className="relative max-w-md"><span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wider"><Sparkles size={15}/> Espaço para anúncios da loja</span><h1 className="mt-5 font-serif text-4xl leading-tight sm:text-5xl">Ofertas e novidades da Personalizê</h1><p className="mt-4 text-sm leading-7 text-white/90 sm:text-base">Aqui você poderá divulgar promoções, lançamentos e campanhas com imagem ou vídeo cadastrado pelo administrador.</p><a href="/produtos" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#75152F] shadow-lg">Ver produtos <ArrowRight size={18}/></a></div>
           <span className="pointer-events-none absolute bottom-6 right-6 hidden rotate-[-12deg] text-8xl drop-shadow-xl sm:block" aria-hidden="true">🎁</span>

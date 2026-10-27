@@ -1,4 +1,8 @@
 # Etapa 2
+- [x] Conferir sete hashes aplicados e organizar referências fora do histórico executável sem reaplicar alterações.
+- [x] Implementar leitura projetada de convites publicados, mídia privada assinada e RSVP validado/limitado; testes isolados aprovados, teste real aguarda evento e artes.
+- [x] Implementar carrossel e múltiplas categorias; nove associações existentes preservadas; seleção após entrada testada no navegador.
+- [x] Verificar fluxos disponíveis com sessão administrativa sem dados fictícios; relatório em RELATORIO-INTEGRACAO-27-10.md.
 - [x] Corrigir campo opcional de nascimento; consulta e gravação do cliente existente verificadas; criação e edição de nascimento testadas em banco isolado sem clientes fictícios hospedados.
 - [x] Integrar aniversários administrativos; fuso Bahia e datas opcionais testados, sino vazio verificado; mensagem manual de aniversariante real aguarda registro correspondente.
 - [x] Integrar catálogo persistido com oito produtos editáveis mais produto existente, categorias, mídia e variações; gravação sem alterar conteúdo verificada.
@@ -6,7 +10,8 @@
 - [x] Reutilizar ferramentas sincronizadas de pedidos e banners; leitura administrativa e banners publicados conectados, sem pedidos fictícios nem pagamentos ativados.
 - [ ] Validar upload e exibição com fotos/vídeos reais de produtos e banners — não há mídias cadastradas; arquivos comerciais não fornecidos.
 - [ ] Histórico de mudanças de pedidos e confirmação de pagamento real — não há pedidos; checkout não ativado nesta atualização pontual.
-- [ ] Convites individuais públicos — etapa posterior solicitada; arquivos sincronizados preservados, sem ampliar acesso a dados privados.
+- [ ] Validar convite publicado, mídias e envio real/consulta de RSVP — bloqueado pela ausência de evento e artes reais autorizados, não criar exemplos fictícios.
+- [ ] Finalização de pedido persistido — fluxo ainda desativado; implementação atômica de checkout e integração de pagamento não concluídas nesta execução.
 - [x] Corrigir somente o e-mail administrativo e a permissão da conta confirmada existente; verificar has_role e exclusividade administrativa.
 - [x] Conferir os fluxos existentes de detalhes, inclusão e pop-up da sacola e localização dos termos; funcionalidades preservadas e verificadas com a conta existente.
 - [x] Aplicar a logomarca original preservando o site.
