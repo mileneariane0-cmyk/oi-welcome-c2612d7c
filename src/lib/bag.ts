@@ -1,0 +1,5 @@
+export type BagEntry={key:string;productId:string;quantity:number;selected:Record<string,string>;personalization:string};
+export function bagKey(userId:string){return `personalize_bag_${userId}`;}
+export function readBag(userId:string):BagEntry[]{try{const value:unknown=JSON.parse(localStorage.getItem(bagKey(userId))||'[]');return Array.isArray(value)?value.filter((v):v is BagEntry=>Boolean(v&&typeof v.key==='string'&&typeof v.productId==='string'&&Number.isInteger(v.quantity)&&v.quantity>0&&v.selected&&typeof v.selected==='object'&&typeof v.personalization==='string')):[];}catch{return [];}}
+export function writeBag(userId:string,entries:BagEntry[]){localStorage.setItem(bagKey(userId),JSON.stringify(entries));}
+export function addBagEntry(entries:BagEntry[],productId:string,quantity:number,selected:Record<string,string>,personalization:string){const key=JSON.stringify([productId,Object.entries(selected).sort(),personalization]);const existing=entries.find(e=>e.key===key);return existing?entries.map(e=>e.key===key?{...e,quantity:e.quantity+quantity}:e):[...entries,{key,productId,quantity,selected,personalization}];}
