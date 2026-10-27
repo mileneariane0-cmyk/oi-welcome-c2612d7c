@@ -1,0 +1,2 @@
+GRANT SELECT ON public.banners TO anon;
+CREATE POLICY storefront_banners_read ON public.banners FOR SELECT TO anon,authenticated USING(published=true AND (starts_at IS NULL OR starts_at<=now()) AND (ends_at IS NULL OR ends_at>now()));
