@@ -14,18 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      quote_request_contacts: {
-        Row: {quote_id:string; name:string; phone:string; created_at:string}
-        Insert: {quote_id:string; name:string; phone:string; created_at?:string}
-        Update: {quote_id?:string; name?:string; phone?:string; created_at?:string}
-        Relationships: []
-      }
-      store_content: {
-        Row: {key: string; content: Json; published: boolean; updated_at: string}
-        Insert: {key: string; content?: Json; published?: boolean; updated_at?: string}
-        Update: {key?: string; content?: Json; published?: boolean; updated_at?: string}
-        Relationships: []
-      }
       banners: {
         Row: {
           created_at: string
@@ -862,7 +850,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      request_public_quote: {Args: {p_name: string; p_phone: string; p_details: string}; Returns: string}
       allowed_platform_file: {
         Args: { bucket: string; filename: string; mime: string }
         Returns: boolean
