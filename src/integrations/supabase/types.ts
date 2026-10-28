@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      store_content: {
+        Row: {key: string; content: Json; published: boolean; updated_at: string}
+        Insert: {key: string; content?: Json; published?: boolean; updated_at?: string}
+        Update: {key?: string; content?: Json; published?: boolean; updated_at?: string}
+        Relationships: []
+      }
       banners: {
         Row: {
           created_at: string
