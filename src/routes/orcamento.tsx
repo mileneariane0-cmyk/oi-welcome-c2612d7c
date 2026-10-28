@@ -9,7 +9,7 @@ const blank:Form={category:"",product:"",quantity:"",date:"",details:"",name:"",
 export function PublicQuote(){
  const [form,setForm]=useState<Form>({...blank}),[logged,setLogged]=useState(false),[loading,setLoading]=useState(true),[review,setReview]=useState(false),[done,setDone]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(""),[website,setWebsite]=useState("");
  const [account,setAccount]=useState({name:"",phone:""});
- useEffect(()=>{let mounted=true;supabase.auth.getUser().then(({data})=>{if(!mounted)return;const u=data.user;setLogged(Boolean(u));if(u)setAccount({name:String(u.user_metadata?.display_name??""),phone:String(u.user_metadata?.whatsapp??"")});setLoading(false);});return()=>{mounted=false;};},[]);
+ useEffect(()=>{let mounted=true;supabase.auth.getUser().then(({data})=>{if(!mounted)return;const u=data.user;setLogged(Boolean(u));if(u)setAccount({name:String(u.user_metadata?.["display_name"]??""),phone:String(u.user_metadata?.["whatsapp"]??"")});setLoading(false);});return()=>{mounted=false;};},[]);
  const set=(key:keyof Form,value:string)=>setForm(f=>({...f,[key]:value}));
  const details=[`Categoria: ${form.category}`,`Produto ou serviço: ${form.product.trim()}`,`Quantidade: ${form.quantity.trim()||"A definir"}`,`Data desejada: ${form.date||"A combinar"}`,`Detalhes: ${form.details.trim()}`].join("\n");
  function requestReview(e:FormEvent){e.preventDefault();setError("");if(form.product.trim().length<3||form.details.trim().length<10){setError("Descreva o produto e os detalhes do orçamento.");return;}if(!logged&&(form.name.trim().length<2||form.phone.replace(/\D/g,"").length<10)){setError("Informe nome e telefone com DDD.");return;}setReview(true);}
