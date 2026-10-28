@@ -25,6 +25,8 @@ function Home() {
   const [termsAccepted,setTermsAccepted] = useState(false);
   const [cartUserId,setCartUserId] = useState<string|null>(null);
   const [loginPromptOpen,setLoginPromptOpen] = useState(false);
+  const [homeCopy,setHomeCopy]=useState<{title:string;subtitle:string;body:string}|null>(null);
+  useEffect(()=>{let mounted=true;supabase.from("store_content").select("content").eq("key","home").eq("published",true).maybeSingle().then(({data,error})=>{if(!mounted||error||!data)return;const c=data.content;if(!c||typeof c!=="object"||Array.isArray(c))return;setHomeCopy({title:typeof c.title==="string"?c.title:"",subtitle:typeof c.subtitle==="string"?c.subtitle:"",body:typeof c.body==="string"?c.body:""});});return()=>{mounted=false;};},[]);
   const [customerLoggedIn,setCustomerLoggedIn] = useState(false);
   useEffect(()=>{
     let active=true;
@@ -66,7 +68,7 @@ function Home() {
             Até a integração com o banco de dados, exibe somente uma peça demonstrativa. */}
         {catalog.banners.length>0?<StoreBannerCarousel banners={catalog.banners}/>:<div aria-label="Banner promocional demonstrativo" className="relative flex min-h-[310px] flex-col justify-center overflow-hidden rounded-[28px] bg-gradient-to-r from-[#75152F] via-[#8e3450] to-[#ba7085] px-7 py-10 text-white sm:min-h-[370px] sm:px-12">
           <div className="pointer-events-none absolute -right-12 -top-14 h-72 w-72 rounded-full border-[35px] border-white/10"/><div className="pointer-events-none absolute bottom-[-90px] right-10 h-56 w-56 rounded-full bg-[#f2aabb]/25 blur-2xl"/>
-          <div className="relative max-w-md"><span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wider"><Sparkles size={15}/> Espaço para anúncios da loja</span><h1 className="mt-5 font-serif text-4xl leading-tight sm:text-5xl">Ofertas e novidades da Personalizê</h1><p className="mt-4 text-sm leading-7 text-white/90 sm:text-base">Aqui você poderá divulgar promoções, lançamentos e campanhas com imagem ou vídeo cadastrado pelo administrador.</p><a href="/produtos" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#75152F] shadow-lg">Ver produtos <ArrowRight size={18}/></a></div>
+          <div className="relative max-w-md"><span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wider"><Sparkles size={15}/> Espaço para anúncios da loja</span><h1 className="mt-5 font-serif text-4xl leading-tight sm:text-5xl">{homeCopy?.title||"Ofertas e novidades da Personalizê"}</h1><p className="mt-4 text-sm leading-7 text-white/90 sm:text-base">{homeCopy?.body||"Aqui você poderá divulgar promoções, lançamentos e campanhas com imagem ou vídeo cadastrado pelo administrador."}</p><a href="/produtos" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#75152F] shadow-lg">Ver produtos <ArrowRight size={18}/></a></div>
           <span className="pointer-events-none absolute bottom-6 right-6 hidden rotate-[-12deg] text-8xl drop-shadow-xl sm:block" aria-hidden="true">🎁</span>
         </div>}
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-1">
