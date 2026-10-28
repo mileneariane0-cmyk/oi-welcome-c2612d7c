@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      quote_request_contacts: {
+        Row: {quote_id:string; name:string; phone:string; created_at:string}
+        Insert: {quote_id:string; name:string; phone:string; created_at?:string}
+        Update: {quote_id?:string; name?:string; phone?:string; created_at?:string}
+        Relationships: []
+      }
       store_content: {
         Row: {key: string; content: Json; published: boolean; updated_at: string}
         Insert: {key: string; content?: Json; published?: boolean; updated_at?: string}
