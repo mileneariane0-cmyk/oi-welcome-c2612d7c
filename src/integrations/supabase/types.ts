@@ -58,29 +58,29 @@ export type Database = {
       }
       categories: {
         Row: {
-          show_on_home: boolean
           created_at: string
           id: string
           name: string
           published: boolean
+          show_on_home: boolean
           slug: string
           updated_at: string
         }
         Insert: {
-          show_on_home?: boolean
           created_at?: string
           id?: string
           name: string
           published?: boolean
+          show_on_home?: boolean
           slug: string
           updated_at?: string
         }
         Update: {
-          show_on_home?: boolean
           created_at?: string
           id?: string
           name?: string
           published?: boolean
+          show_on_home?: boolean
           slug?: string
           updated_at?: string
         }
@@ -630,13 +630,13 @@ export type Database = {
       }
       products: {
         Row: {
-          preview_url: string | null
           category_id: string | null
           created_at: string
           description: string
           id: string
           name: string
           personalization_instructions: string
+          preview_url: string | null
           price: number
           product_type: string
           promotional_price: number | null
@@ -645,13 +645,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          preview_url?: string | null
           category_id?: string | null
           created_at?: string
           description?: string
           id?: string
           name: string
           personalization_instructions?: string
+          preview_url?: string | null
           price?: number
           product_type?: string
           promotional_price?: number | null
@@ -660,13 +660,13 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          preview_url?: string | null
           category_id?: string | null
           created_at?: string
           description?: string
           id?: string
           name?: string
           personalization_instructions?: string
+          preview_url?: string | null
           price?: number
           product_type?: string
           promotional_price?: number | null
