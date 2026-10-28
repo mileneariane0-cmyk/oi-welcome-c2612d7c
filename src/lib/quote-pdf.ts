@@ -1,0 +1,15 @@
+/** PDF simples, gerado localmente sem transmitir dados do cliente a serviços externos. */
+const latin1=(s:string)=>Array.from(s.normalize("NFC")).map(c=>{const n=c.charCodeAt(0);return n>=32&&n<=255?String.fromCharCode(n):n===10?"\n":"?";}).join("");
+const escapePdf=(s:string)=>latin1(s).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)");
+function wrap(text:string,max=85){const out:string[]=[];for(const line of text.split(/\r?\n/)){let rest=line.trim();if(!rest){out.push("");continue;}while(rest.length>max){let n=rest.lastIndexOf(" ",max);if(n<10)n=max;out.push(rest.slice(0,n));rest=rest.slice(n).trimStart();}out.push(rest);}return out;}
+export function downloadQuotePdf(q:{id:string;name:string;phone:string;details:string;amount:number|null;status:string;created_at:string}){
+ const lines=[["PERSONALIZÊ — ORÇAMENTO",16],["Documento informativo • sujeito à confirmação",10],["",10],[`Referência: ${q.id}`,10],[`Data: ${new Date(q.created_at).toLocaleDateString("pt-BR")}`,10],[`Cliente: ${q.name}`,10],[`Telefone: ${q.phone||"Não informado"}`,10],[`Status: ${q.status}`,10],[`Valor estimado: ${q.amount===null?"A definir":q.amount.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}`,10],["",10],["DETALHES DA SOLICITAÇÃO",12],...wrap(q.details).map(t=>[t,10] as [string,number]),["",10],["Este documento não confirma pagamento ou pedido.",9]] as [string,number][];
+ const pages:string[][]=[[]];let y=785;
+ for(const [line,size] of lines){if(y<58){pages.push([]);y=785;}pages[pages.length-1]!.push(`BT /F1 ${size} Tf 48 ${y} Td (${escapePdf(line)}) Tj ET`);y-=size+8;}
+ const objects:string[]=["","<< /Type /Catalog /Pages 2 0 R >>","", "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"];
+ const pageIds:number[]=[];for(const commands of pages){const stream=commands.join("\n");const streamId=objects.length;objects.push(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);const pageId=objects.length;objects.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents ${streamId} 0 R >>`);pageIds.push(pageId);}
+ objects[2]=`<< /Type /Pages /Kids [${pageIds.map(i=>i+" 0 R").join(" ")}] /Count ${pageIds.length} >>`;
+ let pdf="%PDF-1.4\n%âãÏÓ\n";const offsets=[0];for(let i=1;i<objects.length;i++){offsets[i]=pdf.length;pdf+=`${i} 0 obj\n${objects[i]}\nendobj\n`;}const xref=pdf.length;pdf+=`xref\n0 ${objects.length}\n0000000000 65535 f \n`;for(let i=1;i<objects.length;i++)pdf+=`${String(offsets[i]).padStart(10,"0")} 00000 n \n`;pdf+=`trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
+ const bytes=new Uint8Array(pdf.length);for(let i=0;i<pdf.length;i++)bytes[i]=pdf.charCodeAt(i)&255;
+ const url=URL.createObjectURL(new Blob([bytes],{type:"application/pdf"}));const a=document.createElement("a");a.href=url;a.download=`orcamento-personalize-${q.id.slice(0,8)}.pdf`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
