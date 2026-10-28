@@ -58,7 +58,6 @@ export type Database = {
       }
       categories: {
         Row: {
-          show_on_home: boolean
           created_at: string
           id: string
           name: string
@@ -67,7 +66,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          show_on_home?: boolean
           created_at?: string
           id?: string
           name: string
@@ -76,7 +74,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          show_on_home?: boolean
           created_at?: string
           id?: string
           name?: string
@@ -630,7 +627,6 @@ export type Database = {
       }
       products: {
         Row: {
-          preview_url: string | null
           category_id: string | null
           created_at: string
           description: string
@@ -645,7 +641,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          preview_url?: string | null
           category_id?: string | null
           created_at?: string
           description?: string
@@ -660,7 +655,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          preview_url?: string | null
           category_id?: string | null
           created_at?: string
           description?: string
