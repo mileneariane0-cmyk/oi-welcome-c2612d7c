@@ -14,18 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      quote_request_contacts: {
-        Row: {quote_id:string; name:string; phone:string; created_at:string}
-        Insert: {quote_id:string; name:string; phone:string; created_at?:string}
-        Update: {quote_id?:string; name?:string; phone?:string; created_at?:string}
-        Relationships: []
-      }
-      store_content: {
-        Row: {key: string; content: Json; published: boolean; updated_at: string}
-        Insert: {key: string; content?: Json; published?: boolean; updated_at?: string}
-        Update: {key?: string; content?: Json; published?: boolean; updated_at?: string}
-        Relationships: []
-      }
       banners: {
         Row: {
           created_at: string
@@ -723,6 +711,35 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_request_contacts: {
+        Row: {
+          created_at: string
+          name: string
+          phone: string
+          quote_id: string
+        }
+        Insert: {
+          created_at?: string
+          name: string
+          phone: string
+          quote_id: string
+        }
+        Update: {
+          created_at?: string
+          name?: string
+          phone?: string
+          quote_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_request_contacts_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: true
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quotes: {
         Row: {
           amount: number | null
@@ -809,6 +826,27 @@ export type Database = {
           },
         ]
       }
+      store_content: {
+        Row: {
+          content: Json
+          key: string
+          published: boolean
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          key: string
+          published?: boolean
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          key?: string
+          published?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       store_settings: {
         Row: {
           created_at: string
@@ -862,7 +900,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      request_public_quote: {Args: {p_name: string; p_phone: string; p_details: string}; Returns: string}
       allowed_platform_file: {
         Args: { bucket: string; filename: string; mime: string }
         Returns: boolean
@@ -873,6 +910,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      request_public_quote: {
+        Args: { p_details: string; p_name: string; p_phone: string }
+        Returns: string
       }
       submit_invitation_rsvp: {
         Args: {

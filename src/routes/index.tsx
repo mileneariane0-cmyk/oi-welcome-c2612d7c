@@ -26,7 +26,7 @@ function Home() {
   const [cartUserId,setCartUserId] = useState<string|null>(null);
   const [loginPromptOpen,setLoginPromptOpen] = useState(false);
   const [homeCopy,setHomeCopy]=useState<{title:string;subtitle:string;body:string}|null>(null);
-  useEffect(()=>{let mounted=true;supabase.from("store_content").select("content").eq("key","home").eq("published",true).maybeSingle().then(({data,error})=>{if(!mounted||error||!data)return;const c=data.content;if(!c||typeof c!=="object"||Array.isArray(c))return;setHomeCopy({title:typeof c.title==="string"?c.title:"",subtitle:typeof c.subtitle==="string"?c.subtitle:"",body:typeof c.body==="string"?c.body:""});});return()=>{mounted=false;};},[]);
+  useEffect(()=>{let mounted=true;supabase.from("store_content").select("content").eq("key","home").eq("published",true).maybeSingle().then(({data,error})=>{if(!mounted||error||!data)return;const c=data.content;if(!c||typeof c!=="object"||Array.isArray(c))return;setHomeCopy({title:typeof c["title"]==="string"?c["title"]:"",subtitle:typeof c["subtitle"]==="string"?c["subtitle"]:"",body:typeof c["body"]==="string"?c["body"]:""});});return()=>{mounted=false;};},[]);
   const [customerLoggedIn,setCustomerLoggedIn] = useState(false);
   useEffect(()=>{
     let active=true;
