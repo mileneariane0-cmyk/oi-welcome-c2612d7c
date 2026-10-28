@@ -1,0 +1,8 @@
+export type BlockType="heading"|"text"|"image"|"video"|"date"|"location"|"rsvp"|"spacer";
+export type Block={id:string;type:BlockType;text:string;mediaId:string;align:"left"|"center"|"right";size:"sm"|"md"|"lg";color:string};
+export const BLOCK_LABELS:Record<BlockType,string>={heading:"Título",text:"Texto",image:"Foto",video:"Vídeo",date:"Data do evento",location:"Local",rsvp:"Confirmação de presença",spacer:"Espaço"};
+const TYPES=Object.keys(BLOCK_LABELS) as BlockType[];
+export function newBlock(type:BlockType):Block{return {id:crypto.randomUUID(),type,text:type==="heading"?"Novo título":type==="text"?"Escreva sua mensagem":"",mediaId:"",align:"center",size:"md",color:""};}
+/** Aceita apenas blocos válidos e limita tamanhos, para uso público e no editor. */
+export function sanitizeBlocks(value:unknown):Block[]{if(!Array.isArray(value))return [];return value.slice(0,80).flatMap(v=>{if(!v||typeof v!=="object")return [];const b=v as Record<string,unknown>;const type=b["type"] as BlockType;if(!TYPES.includes(type))return [];const s=(k:string,m:number)=>typeof b[k]==="string"?(b[k] as string).slice(0,m):"";const align=["left","center","right"].includes(s("align",6))?s("align",6) as Block["align"]:"center";const size=["sm","md","lg"].includes(s("size",2))?s("size",2) as Block["size"]:"md";const color=/^#[0-9a-f]{6}$/i.test(s("color",7))?s("color",7):"";return [{id:s("id",64)||crypto.randomUUID(),type,text:s("text",5000),mediaId:s("mediaId",64),align,size,color}];});}
+export function moveBlock(list:Block[],index:number,dir:number){const t=index+dir;if(t<0||t>=list.length)return list;const n=[...list];[n[index],n[t]]=[n[t]!,n[index]!];return n;}
