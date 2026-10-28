@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
+import { Route as OrcamentoRouteImport } from './routes/orcamento'
 import { Route as ProdutosRouteImport } from './routes/produtos'
 import { Route as RecuperarContaRouteImport } from './routes/recuperar-conta'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -38,6 +39,11 @@ const AuthRoute = AuthRouteImport.update({
 const MinhaContaRoute = MinhaContaRouteImport.update({
   id: '/minha-conta',
   path: '/minha-conta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrcamentoRoute = OrcamentoRouteImport.update({
+  id: '/orcamento',
+  path: '/orcamento',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProdutosRoute = ProdutosRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/orcamento': typeof OrcamentoRoute
   '/produtos': typeof ProdutosRoute
   '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/orcamento': typeof OrcamentoRoute
   '/produtos': typeof ProdutosRoute
   '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/orcamento': typeof OrcamentoRoute
   '/produtos': typeof ProdutosRoute
   '/recuperar-conta': typeof RecuperarContaRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/minha-conta'
+    | '/orcamento'
     | '/produtos'
     | '/recuperar-conta'
     | '/reset-password'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/minha-conta'
+    | '/orcamento'
     | '/produtos'
     | '/recuperar-conta'
     | '/reset-password'
@@ -146,6 +157,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/minha-conta'
+    | '/orcamento'
     | '/produtos'
     | '/recuperar-conta'
     | '/reset-password'
@@ -160,6 +172,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   MinhaContaRoute: typeof MinhaContaRoute
+  OrcamentoRoute: typeof OrcamentoRoute
   ProdutosRoute: typeof ProdutosRoute
   RecuperarContaRoute: typeof RecuperarContaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -196,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/minha-conta'
       fullPath: '/minha-conta'
       preLoaderRoute: typeof MinhaContaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orcamento': {
+      id: '/orcamento'
+      path: '/orcamento'
+      fullPath: '/orcamento'
+      preLoaderRoute: typeof OrcamentoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/produtos': {
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   MinhaContaRoute: MinhaContaRoute,
+  OrcamentoRoute: OrcamentoRoute,
   ProdutosRoute: ProdutosRoute,
   RecuperarContaRoute: RecuperarContaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -276,13 +297,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
