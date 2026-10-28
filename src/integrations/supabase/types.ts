@@ -856,6 +856,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      request_public_quote: {Args: {p_name: string; p_phone: string; p_details: string}; Returns: string}
       allowed_platform_file: {
         Args: { bucket: string; filename: string; mime: string }
         Returns: boolean
