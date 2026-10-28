@@ -62,6 +62,7 @@ export type Database = {
           id: string
           name: string
           published: boolean
+          show_on_home: boolean
           slug: string
           updated_at: string
         }
@@ -70,6 +71,7 @@ export type Database = {
           id?: string
           name: string
           published?: boolean
+          show_on_home?: boolean
           slug: string
           updated_at?: string
         }
@@ -78,6 +80,7 @@ export type Database = {
           id?: string
           name?: string
           published?: boolean
+          show_on_home?: boolean
           slug?: string
           updated_at?: string
         }
@@ -633,6 +636,7 @@ export type Database = {
           id: string
           name: string
           personalization_instructions: string
+          preview_url: string | null
           price: number
           product_type: string
           promotional_price: number | null
@@ -647,6 +651,7 @@ export type Database = {
           id?: string
           name: string
           personalization_instructions?: string
+          preview_url?: string | null
           price?: number
           product_type?: string
           promotional_price?: number | null
@@ -661,6 +666,7 @@ export type Database = {
           id?: string
           name?: string
           personalization_instructions?: string
+          preview_url?: string | null
           price?: number
           product_type?: string
           promotional_price?: number | null

@@ -71,6 +71,13 @@
       "when": 1793111533892,
       "tag": "0009_verified_order_payment_status",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793193174237,
+      "tag": "0010_home_categories_product_preview",
+      "breakpoints": true
     }
   ]
 }
